@@ -1,46 +1,29 @@
 import prisma from "@/lib/prisma";
-import { Locale, type NewProgram } from "@/types/index";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { Locale, NewProgram, translatedProgram } from "@/types";
+import { error } from "console";
+import { unstable_cache, revalidateTag } from "next/cache";
 
+// إضافة برنامج جديد
 export const addNewProgram = async (data: NewProgram) => {
   try {
     const result = await prisma.programs.create({
-    data: {
-      ...data,
-      start_date: new Date(data.start_date!),
-      end_date: new Date(data.end_date!)
-    }
-  })
-  revalidateTag("categories","max");
+      data,
+    });
+
     revalidateTag("programs", "max");
-    return {
-      data: result,
-      message: "Program Added Successfully",
-      status: 201,
-    };
+
+    return { data: result, message: "Program Added Successfully", status: 201 };
   } catch (error) {
-    console.log("error",error);
-    
-    return {
-      data: error,
-      message: "Error In Adding The program",
-      status: 500,
-    };
+    return { data: error, message: "Error In Adding The Program", status: 500 };
   }
 };
 
 export const getAllPrograms = unstable_cache(
   async () => {
     try {
-      const result = await prisma.programs.findMany({
-        include: { category: true },
-      });
-      return {
-        data: result,
-        message: "All Programs",
-        status: 200,
-      };
-    } catch (error) {
+      const result = await prisma.programs.findMany();
+      return { data: result, message: "All Programs", status: 200 };
+    } catch {
       return {
         data: null,
         message: "Error In Getting All Programs",
@@ -52,83 +35,134 @@ export const getAllPrograms = unstable_cache(
   { tags: ["programs"], revalidate: 3600 }
 );
 
-export const getProgramById = (id: string) => {
-  const cachedFn = unstable_cache(
+export const getProgramsByType = (
+  type: "life_programs" | "professional_programs"
+) =>
+  unstable_cache(
     async () => {
       try {
-        const result = await prisma.programs.findUnique({
-          where: { id },
-          include: { category: true },
+        const result = await prisma.programs.findMany({
+          where: { program_type: type },
         });
-        if (!result)
-          return { data: null, message: "Program not found", status: 409 };
+
         return {
           data: result,
-          message: "Program fetched successfully",
+          message: "Programs by type fetched",
           status: 200,
         };
-      } catch (error) {
-        return { data: null, message: "Error fetching program", status: 500 };
+      } catch {
+        return {
+          data: null,
+          message: "Error fetching programs by type",
+          status: 500,
+        };
       }
     },
-    [`program-by-id-${id}`],
+    [`programs-by-type-${type}`],
     { tags: ["programs"], revalidate: 3600 }
-  );
+  )();
 
-  return cachedFn();
-};
-
-export const getProgramNameAndIdById= (id: string) => {
-  const cachedFn = unstable_cache(
+export const getProgramsByLocale = async (
+  locale: Locale,
+  program_type?: "life_programs" | "professional_programs"
+) => {
+  return unstable_cache(
     async () => {
-      try {
-        const result = await prisma.programs.findUnique({
-          where: { id },
-          select:{id:true, program_title_en:true}
-        });
-        if (!result)
-          return { data: null, message: "Program not found", status: 409 };
-        return {
-          data: result,
-          message: "Program fetched successfully",
-          status: 200,
-        };
-      } catch (error) {
-        return { data: null, message: "Error fetching program", status: 500 };
-      }
+      const result = program_type
+        ? await prisma.programs.findMany({ where: { program_type } })
+        : await prisma.programs.findMany();
+
+      const translatedPrograms: translatedProgram[] = result.map((program) => ({
+        program_title:
+          locale === "en" ? program.program_title_en : program.program_title_ar,
+        program_description:
+          locale === "en"
+            ? program.program_description_en
+            : program.program_description_ar,
+        program_location:
+          locale === "en"
+            ? program.program_location_en
+            : program.program_location_ar,
+        slug: program.slug,
+        image: program.image,
+        program_type: program.program_type,
+        duration_h: program.duration_h,
+        duration_d: program.duration_d,
+      }));
+
+      return {
+        data: translatedPrograms,
+        status: 200,
+        message: "Translated programs",
+      };
     },
-    [`program-name-by-id-${id}`],
+    [`programs-${locale}-${program_type ?? "all"}`],
     { tags: ["programs"], revalidate: 3600 }
-  );
-
-  return cachedFn();
+  )();
 };
 
-export const getProgramBySlug = (slug: string) => {
-  const cachedFn = unstable_cache(
+export const getProgramBySlug = (slug: string) =>
+  unstable_cache(
     async () => {
       try {
-        const result = await prisma.programs.findUnique({
-          where: { slug },
-          include: { category: true },
-        });
-        if (!result)
-          return { data: null, message: "Program not found", status: 409 };
+        const program = await prisma.programs.findUnique({ where: { slug } });
+        if (!program)
+          return { data: null, message: "Program not found", status: 404 };
+
         return {
-          data: result,
+          data: program,
           message: "Program fetched successfully",
           status: 200,
         };
-      } catch (error) {
+      } catch {
         return { data: null, message: "Error fetching program", status: 500 };
       }
     },
     [`program-by-slug-${slug}`],
     { tags: ["programs"], revalidate: 3600 }
-  );
+  )();
 
-  return cachedFn();
-};
+export const getProgramBySlugAndLocale = (slug: string, locale: Locale) =>
+  unstable_cache(
+    async () => {
+      try {
+        const program = await prisma.programs.findUnique({ where: { slug } });
+        if (!program)
+          return { data: null, message: "Program not found", status: 404 };
+
+        const translated: translatedProgram = {
+          program_title:
+            locale === "en"
+              ? program.program_title_en
+              : program.program_title_ar,
+          program_description:
+            locale === "en"
+              ? program.program_description_en
+              : program.program_description_ar,
+          program_location:
+            locale === "en"
+              ? program.program_location_en
+              : program.program_location_ar,
+          slug: program.slug,
+          image: program.image,
+          program_type: program.program_type,
+          duration_h: program.duration_h,
+          duration_d: program.duration_d,
+        };
+
+        return {
+          data: translated,
+          message: "Program fetched successfully",
+          status: 200,
+        };
+      } catch(error) {
+        return { data: error, message: "Error fetching program", status: 500 };
+     
+      }
+    },
+    [`program-by-slug-locale-${slug}-${locale}`],
+    { tags: ["programs"], revalidate: 3600 }
+  )();
 
 export const updateProgram = async (id: string, data: Partial<NewProgram>) => {
   try {
@@ -139,6 +173,7 @@ export const updateProgram = async (id: string, data: Partial<NewProgram>) => {
     const result = await prisma.programs.update({ where: { id }, data });
     revalidateTag("categories", "max");
     revalidateTag("programs", "max");
+
     return {
       data: result,
       message: "Program updated successfully",
@@ -157,6 +192,7 @@ export const deleteProgram = async (id: string) => {
 
     const result = await prisma.programs.delete({ where: { id } });
     revalidateTag("programs", "max");
+
     return {
       data: result,
       message: "Program deleted successfully",
@@ -165,38 +201,4 @@ export const deleteProgram = async (id: string) => {
   } catch (error) {
     return { data: error, message: "Error deleting program", status: 500 };
   }
-};
-
-export const getProgramsByLocale = async (locale: Locale) => {
-  unstable_cache(async () => {
-    const allPrograms = (await getAllPrograms()).data;
-
-    if (allPrograms === null) return null;
-
-    const translatedPrograms = allPrograms.map((progrm) => {
-      return {
-        program_title:
-          locale === "en" ? progrm.program_title_en : progrm.program_title_ar,
-        program_description:
-          locale === "en"
-            ? progrm.program_description_en
-            : progrm.program_description_ar,
-        program_location:
-          locale === "en"
-            ? progrm.program_location_en
-            : progrm.program_location_ar,
-        duration: locale === "en" ? progrm.duration_en : progrm.duration_ar,
-        slug: progrm.slug,
-        image: progrm.image,
-        category_id: progrm.category_id,
-        start_date: progrm.start_date,
-        end_date: progrm.end_date,
-      };
-    });
-    return {
-      data: translatedPrograms,
-      message: "All Translated Programs",
-      status: 200,
-    };
-  });
 };

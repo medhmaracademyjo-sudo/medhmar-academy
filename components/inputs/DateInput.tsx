@@ -11,7 +11,8 @@ interface DateInputProps {
   description?: string;
   min?: string;
   max?: string;
-  initialValue?: Date | string | null; // <-- allow Date or string
+  initialValue?: Date | string | null; 
+  dir?:boolean
 }
 
 export default function DateInput({
@@ -24,6 +25,7 @@ export default function DateInput({
   min,
   max,
   initialValue,
+  dir
 }: DateInputProps) {
   const id =
     register?.name ?? `input-${label.replace(/\s+/g, "-").toLowerCase()}`;
@@ -35,7 +37,7 @@ export default function DateInput({
     : "";
 
   return (
-    <div className={`mb-4 ${className}`}>
+    <div className={`mb-4 ${className}`} >
       <label
         htmlFor={id}
         className="block text-sm font-semibold text-gray-700 mb-1 ml-2"
@@ -43,6 +45,7 @@ export default function DateInput({
         {label}
       </label>
 <input
+dir={dir?"rtl":"ltr"}
   id={id}
   type="date"
   {...register}

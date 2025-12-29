@@ -40,16 +40,18 @@ export default function ApplicationsFilter({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-wrap gap-4 mb-6 items-end"
+      className="flex flex-col gap-4 ml-0 mr-0 lg:ml-4 lg:mr-4 "
     >
-      <FormSelect
+      <div className="flex flex-wrap gap-4  items-start justify-start">
+   <FormSelect
         name="location"
         label="Location"
         control={control}
         options={[
-          { label: "All", value: "all" },
+          { label: "All", value: null },
           ...saudiCitiesEn,
         ]}
+        
       />
 
       <FormSelect
@@ -57,16 +59,19 @@ export default function ApplicationsFilter({
         label="Gender"
         control={control}
         options={[
-          { label: "All", value: "all" },
+          { label: "All", value: null },
           { label: "Male", value: "male" },
           { label: "Female", value: "female" },
         ]}
+       
       />
 
-      <TextInput label="Min Age" register={register("minAge")} />
-      <TextInput label="Max Age" register={register("maxAge")} />
+      <TextInput label="Min Age" register={register("minAge")}  />
+      <TextInput label="Max Age" register={register("maxAge")}  />
 
-      <div className="flex gap-2 flex-row items-center justify-center">
+      </div>
+   
+      <div className="flex gap-2 flex-row items-start justify-start">
         <Button type="submit" className="bg-black text-white">
           Apply
         </Button>

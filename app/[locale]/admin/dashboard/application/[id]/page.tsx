@@ -1,11 +1,11 @@
 import { getAllApplicationsByFilters } from "@/app/server/applications/services";
 import { deleteApplicationAction } from "../(actions)/deleteApplicationAction";
 import { ApplicationColumns } from "@/components/columns/applications-columns";
-import { DataTable } from "@/components/data-table";
 import { Card, CardContent } from "@/components/ui/card";
 import { FolderOpen } from "lucide-react";
 import { getProgramNameAndIdById } from "@/app/server/programs/services";
 import ApplicationsFilter from "@/components/aplications/ApplicationsFilter"
+import { ApplicationsDataTable } from "@/components/Applications-data-table";
 
 interface Props {
   searchParams: Promise<{
@@ -32,11 +32,12 @@ async function page({ params, searchParams }: Props) {
 
   const programDetails= (await getProgramNameAndIdById(id)).data
 
+  
   const filteredData= await getAllApplicationsByFilters(page,filters)
 
-  return  <div className="flex flex-col justify-center items-center ml-5 md:ml-7 w-[88vw] md:w-[68vw] xl:w-[80vw] ">
+  return  <div className="flex flex-col justify-start items-start ml-5 md:ml-7 w-[88vw] md:w-[68vw] xl:w-[80vw] ">
       <h1 className="text-2xl font-semibold mb-4  border-b p-1 w-full  ">Applications On {programDetails?.program_title_en}</h1>
-<ApplicationsFilter
+  <ApplicationsFilter
   initialLocation={searchParamsData.location ?? ""}
   initialGender={searchParamsData.gender ?? null}   
   initialMinAge={searchParamsData.minAge ?? undefined}  
@@ -55,11 +56,12 @@ async function page({ params, searchParams }: Props) {
         </Card>
       ) : (
         <>
-          <DataTable
+          <ApplicationsDataTable
             columns={ApplicationColumns}
             data={filteredData.data}
             routeName="ourTeam"
             deleteAction={deleteApplicationAction}
+            totalPages={filteredData.totalPages}
           />
          
 

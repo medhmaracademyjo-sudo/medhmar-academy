@@ -140,7 +140,7 @@ export const deleteBanner = async (id: string) => {
 
 export const getAllBannersByLocale = (locale: Locale) =>
   unstable_cache(
-    async (locale: Locale) => {
+    async () => {
       try {
         const allBanners = await getAllBanners();
 

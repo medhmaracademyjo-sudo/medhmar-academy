@@ -19,10 +19,9 @@ import TextInput from "@/components/inputs/TextInput";
 import TextareaInput from "@/components/inputs/TextareaInput";
 import { FolderOpen } from "lucide-react";
 import FormSelect from "../inputs/SelectorInput";
-import DateInput from "../inputs/DateInput";
+import CheckboxInput from "../inputs/CheckBox";
 import { saudiCitiesAr, saudiCitiesEn } from "@/app/constants/saudiCities";
 interface Props {
-  allCategoriesIdAndName: { id: string; category_name_en: string }[];
   program: NewProgram | null;
   action: (
     categoryId: string,
@@ -34,7 +33,7 @@ type ProgramFormValues = z.infer<typeof programsSchema>;
 export default function EditProgramForm({
   program,
   action,
-  allCategoriesIdAndName,
+  
 }: Props) {
   const router = useRouter();
   const {
@@ -53,25 +52,18 @@ export default function EditProgramForm({
       image: program?.image ?? "",
       program_location_en: program?.program_location_en ?? "",
       program_location_ar: program?.program_location_ar ?? "",
-      duration_en: program?.duration_en ?? "",
-      duration_ar: program?.duration_ar ?? "",
-      start_date: program?.start_date ?? new Date(),
-      end_date: program?.end_date ?? new Date(),
+      duration_h: program?.duration_h ?? "",
+      duration_d: program?.duration_d ?? "",
+      feature:program?.feature??false,
       slug: program?.slug ?? "",
-      category_id: program?.category_id,
+      program_type: program?.program_type,
     },
     resolver: zodResolver(
       programsSchema
     ) as unknown as Resolver<ProgramFormValues>,
   });
 
-  const categoryOptions = allCategoriesIdAndName.map((category) => {
-    return {
-      value: category.id,
-      label: category.category_name_en,
-    };
-  });
-
+ 
   const [isPending, startTransition] = useTransition();
 
   setValue(
@@ -152,11 +144,17 @@ export default function EditProgramForm({
           <CardContent className="flex flex-col items-start gap-5 mb-7 ">
             <div className="flex flex-col w-full max-w-sm">
               <FormSelect
-                name="category_id"
-                label="Category"
+                name="program_type"
+                label="Program Type"
                 control={control}
-                options={categoryOptions}
-                error={errors.category_id}
+                 options={[{
+                  label:"Life Programs",
+                  value:"life_programs"
+                },{
+                  label:"Professional Programs",
+                  value:"professional_programs"
+                }]}
+                error={errors.program_type}
                 placeholder="Select category"
                 triggerClassName="w-full text-md"
               />
@@ -188,20 +186,20 @@ export default function EditProgramForm({
               error={errors.program_description_ar}
               className="md:w-[40vw] w-full"
             />
-            <div className="flex flex-col lg:flex-row w-full gap-4">
-              <TextInput
-                register={register("duration_en")}
-                label="English Duration"
-                error={errors.duration_en}
-                className="lg:w-[19.5vw] w-full"
-              />
-              <TextInput
-                register={register("duration_ar")}
-                label="Arabic Duration"
-                error={errors.duration_ar}
-                className="lg:w-[19.5vw] w-full"
-              />
-            </div>
+           <div className="flex flex-col lg:flex-row w-full gap-4">
+                         <TextInput
+                           register={register("duration_d")}
+                           label="Duration (Days)"
+                           error={errors.duration_d}
+                           className="lg:w-[19.5vw] w-full"
+                         />
+                         <TextInput
+                           register={register("duration_h")}
+                           label="Duration (Hours)"
+                           error={errors.duration_h}
+                           className="lg:w-[19.5vw] w-full"
+                         />
+                       </div>
             <div className="flex flex-col lg:flex-row w-full gap-4">
               <FormSelect
                 name="program_location_en"
@@ -224,23 +222,6 @@ export default function EditProgramForm({
                 className="lg:w-[19.5vw] w-full"
               />
             </div>
-            <div className="flex flex-col lg:flex-row w-full gap-4">
-              <DateInput
-                register={register("start_date")}
-                label="Start Date"
-                error={errors.start_date}
-                initialValue={program?.start_date}
-                className="lg:w-[19.5vw] w-full"
-              />
-              <DateInput
-                register={register("end_date")}
-                label="End Date"
-                error={errors.end_date}
-                initialValue={program?.end_date}
-                className="lg:w-[19.5vw] w-full"
-              />
-            </div>
-
             <div className="flex flex-col w-full max-w-sm">
               <label className="text-base text-black mb-1">Program Image</label>
               <ImageUploader
@@ -250,6 +231,7 @@ export default function EditProgramForm({
                 onUploadError={handleUploadError}
               />
             </div>
+             <CheckboxInput register={register("feature")} label="Feature" error={errors.feature}/>
 
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">

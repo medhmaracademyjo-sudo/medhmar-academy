@@ -20,8 +20,9 @@ import TextareaInput from "../inputs/TextareaInput";
 import FormSelect from "../inputs/SelectorInput";
 import DateInput from "../inputs/DateInput"
 import {saudiCitiesAr,saudiCitiesEn} from "@/app/constants/saudiCities"
+import CheckboxInput from "../inputs/CheckBox";
 interface Props {
-  allCategoriesIdAndName: { id: string; category_name_en: string }[];
+  
   action: (
     data: NewProgram
   ) => Promise<{ success: boolean; message: string; status: number }>;
@@ -31,7 +32,7 @@ type ProgramFormValues = z.infer<typeof programsSchema>;
 
 export default function AddProgramForm({
   action,
-  allCategoriesIdAndName,
+  
 }: Props) {
   const {
     register,
@@ -42,7 +43,7 @@ export default function AddProgramForm({
     formState: { errors },
   } = useForm<ProgramFormValues>({
     resolver: zodResolver(programsSchema) as unknown as Resolver<ProgramFormValues>,
-    defaultValues: { category_id: "" },
+    
   });
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -51,12 +52,7 @@ export default function AddProgramForm({
     setValue("image", url, { shouldValidate: true });
   };
 
-  const categoryOptions = allCategoriesIdAndName.map((category) => {
-    return {
-      value: category.id,
-      label: category.category_name_en,
-    };
-  });
+  
 
   setValue(
     "slug",
@@ -118,12 +114,18 @@ export default function AddProgramForm({
           <CardContent className="flex flex-col items-start gap-5 mb-7 ">
             <div className="flex flex-col w-full max-w-sm">
               <FormSelect
-                name="category_id"
-                label="Category"
+                name="program_type"
+                label="Program Type"
                 control={control}
-                options={categoryOptions}
-                error={errors.category_id}
-                placeholder="Select category"
+                options={[{
+                  label:"Life Programs",
+                  value:"life_programs"
+                },{
+                  label:"Professional Programs",
+                  value:"professional_programs"
+                }]}
+                error={errors.program_type}
+                placeholder="Select Type"
                 triggerClassName="w-full text-md"
               />
             </div>
@@ -156,15 +158,15 @@ export default function AddProgramForm({
             />
             <div className="flex flex-col lg:flex-row w-full gap-4">
               <TextInput
-                register={register("duration_en")}
-                label="English Duration"
-                error={errors.duration_en}
+                register={register("duration_d")}
+                label="Duration (Days)"
+                error={errors.duration_d}
                 className="lg:w-[19.5vw] w-full"
               />
               <TextInput
-                register={register("duration_ar")}
-                label="Arabic Duration"
-                error={errors.duration_ar}
+                register={register("duration_h")}
+                label="Duration (Hours)"
+                error={errors.duration_h}
                 className="lg:w-[19.5vw] w-full"
               />
             </div>
@@ -191,18 +193,7 @@ export default function AddProgramForm({
               />
             </div>
             <div className="flex flex-col lg:flex-row w-full gap-4">
-              <DateInput
-                register={register("start_date")}
-                label="Start Date"
-                error={errors.start_date}
-                className="lg:w-[19.5vw] w-full"
-              />
-              <DateInput
-                register={register("end_date")}
-                label="End Date"
-                error={errors.end_date}
-                className="lg:w-[19.5vw] w-full"
-              />
+        
             </div>
 
             <div className="flex flex-col w-full max-w-sm">
@@ -214,6 +205,8 @@ export default function AddProgramForm({
                 onUploadError={handleUploadError}
               />
             </div>
+
+            <CheckboxInput register={register("feature")} label="Feature" error={errors.feature}/>
 
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">

@@ -7,6 +7,7 @@ import BenefitsSection from '@/components/homecomponents/BenefitsSection'
 import CTASection from '@/components/homecomponents/CTASection'
 import Footer from '@/components/ui/Footer'
 import { homeData } from '@/data/homedata'
+import {getAllBannersByLocale} from "@/app/server/banners/services"
 
 type Locale = 'en' | 'ar'
 
@@ -19,10 +20,14 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { locale } =  await params
   const isAr = locale === 'ar'
+  const data=await getAllBannersByLocale(locale)()
+  const banners=data?.data
+  
+  
 
   return (
     <div className="min-h-screen bg-white text-black">
-      <Banner isAr={isAr} images={homeData.images} />
+      <Banner locale={locale} banners={banners ?? []} />
 
       <StatsSection stats={homeData.stats} />
       <ProgramsSection programs={homeData.programs} />

@@ -28,34 +28,25 @@ model users {
 
 model applications {
   id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  first_name      String?   @db.VarChar(255)
-  last_name       String?   @db.VarChar(255)
+  name            String    @db.VarChar(255)
   gender          gender
-  email           String?   @db.VarChar(255)
-  phone_number    Int?
-  city            String?   @db.VarChar(255)
-  education_level String?   @db.VarChar(255)
+  email           String    @db.VarChar(255)
+  phone_number    String    @db.VarChar(255)
+  location        String    @db.VarChar(255)
+  education_level String    @db.VarChar(255)
   program_id      String?   @db.Uuid
+  major           String    @db.VarChar(255)
+  date_of_birth   DateTime  @db.Date
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
   programs        programs? @relation(fields: [program_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model banners {
   id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name           String? @db.VarChar(255)
-  image          String?
+  name           String  @db.VarChar(255)
+  image          String
   description_en String?
   description_ar String?
-}
-
-model category {
-  id                      String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  category_name_en        String     @db.VarChar(255)
-  category_name_ar        String     @db.VarChar(255)
-  category_description_en String?
-  category_description_ar String?
-  slug                    String?    @db.VarChar(255)
-  logo                    String?    @db.VarChar(255)
-  programs                programs[]
 }
 
 model programs {
@@ -66,12 +57,26 @@ model programs {
   program_description_ar String?
   program_location_en    String?        @db.VarChar(255)
   program_location_ar    String?        @db.VarChar(255)
-  duration               String?        @db.VarChar(255)
-  category_id            String?        @db.Uuid
-  slug                   String?        @unique @db.VarChar(255)
+  duration_h             String         @db.VarChar(255)
+  slug                   String         @unique @db.VarChar(255)
   image                  String?        @db.VarChar(255)
+  program_type           program_type   @default(life_programs)
+  duration_d             String?        @db.VarChar(255)
+  feature                Boolean?       @default(false)
   applications           applications[]
-  category               category?      @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model our_team {
+  id             String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  member_type    member_type? @default(professional_programs)
+  name_en        String       @db.VarChar(255)
+  name_ar        String       @db.VarChar(255)
+  description_en String?
+  description_ar String?
+  position_en    String       @db.VarChar(255)
+  position_ar    String       @db.VarChar(255)
+  image          String?      @db.VarChar(255)
+  display_order  Int?
 }
 
 enum role {
@@ -82,4 +87,15 @@ enum role {
 enum gender {
   male
   female
+}
+
+enum member_type {
+  founder
+  life_programs
+  professional_programs
+}
+
+enum program_type {
+  life_programs
+  professional_programs
 }

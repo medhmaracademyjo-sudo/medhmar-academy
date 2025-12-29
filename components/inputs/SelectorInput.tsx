@@ -24,6 +24,7 @@ interface FormSelectProps {
   className?: string;
   description?: string;
   triggerClassName?: string;
+  dir?:boolean
 }
 
 export default function FormSelect({
@@ -36,6 +37,7 @@ export default function FormSelect({
   className = "",
   description,
   triggerClassName = "w-[180px]",
+  dir
 }: FormSelectProps) {
   const id = name;
   const errorId = `${id}-error`;
@@ -50,10 +52,11 @@ export default function FormSelect({
       </label>
 
       <Controller
+      defaultValue={""}
         name={name}
         control={control}
         render={({ field }) => (
-          <Select onValueChange={field.onChange} value={field.value}>
+          <Select onValueChange={field.onChange} value={field.value} dir={dir?"rtl":"ltr"}>
             <SelectTrigger
               id={id}
               aria-invalid={!!error}
@@ -68,9 +71,10 @@ export default function FormSelect({
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
 
-            <SelectContent>
+            <SelectContent >
+              
               {options.map((option) => (
-                <SelectItem key={option.value} value={option.value!}>
+                <SelectItem key={option.value}  value={option.value!}>
                   {option.label}
                 </SelectItem>
               ))}

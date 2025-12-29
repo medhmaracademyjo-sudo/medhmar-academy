@@ -58,14 +58,54 @@ export type NewProgram = {
   program_description_ar: string | null;
   program_location_en: string |null;
   program_location_ar: string |null;
-  duration_en: string;
-  duration_ar: string;
+  duration_h: string ;
+  duration_d: string |null;
   slug: string ;
   image: string |null;
-  category_id: string;
-  start_date: Date | null;
-  end_date: Date | null;
+  program_type: "life_programs" |"professional_programs";
+  feature:boolean | null,
 };
+
+
+
+export type translatedProgram = {
+  id?: string;
+  program_title: string;
+
+  program_description: string | null;
+
+  program_location: string |null;
+  duration_h: string ;
+  duration_d: string |null;
+
+  slug: string ;
+  image: string |null;
+  program_type: "life_programs" |"professional_programs";
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export type ProgramWithCategory=NewProgram &{
   category:{
@@ -90,6 +130,19 @@ export type NewApplication= {
   program_id:string,
   major:string,
   date_of_birth:string
+}
+
+export type NewApplicationForm= {
+  name:string;
+  gender: "male" |"female",
+  email:string,
+  phone_number:string,
+  location:string,
+  education_level:string,
+  life_program_id:string,
+   professional_programs_id:string,
+  major:string,
+  date_of_birth:Date |string
 }
 
 export type NewMember= {

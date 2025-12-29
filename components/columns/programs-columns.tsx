@@ -103,64 +103,35 @@ export const ProgramColumns: ColumnDef<NewProgram>[] = [
 
   },
     {
-    accessorKey: "duration_en",
+    accessorKey: "duration_d",
     header: ({ column }) => (
       <button
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="flex items-center gap-1 cursor-pointer"
       >
-        Duration (EN)
+        Duration (Day)
         <ArrowUpDown className="h-4 w-4" />
       </button>
     ),
-    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.duration_en}</div>,
+    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.duration_d}</div>,
     enableSorting: true,
   },
   {
-    accessorKey: "duration_ar",
+    accessorKey: "duration_h",
     header: ({ column }) => (
       <button
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         className="flex items-center gap-1 cursor-pointer"
       >
-        Duration (AR)
+        Duration (Hours)
         <ArrowUpDown className="h-4 w-4" />
       </button>
     ),
-    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.duration_ar}</div>,
+    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.duration_h}</div>,
     enableSorting: true,
     meta:{hiddenByDefault:true}
   },
-   {
-    accessorKey: "start_date",
-    header: ({ column }) => (
-      <button
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="flex items-center gap-1 cursor-pointer"
-      >
-        Start Date 
-        <ArrowUpDown className="h-4 w-4" />
-      </button>
-    ),
-    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.start_date?.toISOString()}</div>,
-    enableSorting: true,
-    meta:{hiddenByDefault:true}
-  },
-  {
-    accessorKey: "end_date",
-    header: ({ column }) => (
-      <button
-        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        className="flex items-center gap-1 cursor-pointer"
-      >
-        End Date 
-        <ArrowUpDown className="h-4 w-4" />
-      </button>
-    ),
-    cell: ({ row }) => <div className="text-gray-800 font-medium">{row.original.end_date?.toISOString()}</div>,
-    enableSorting: true,
-    meta:{hiddenByDefault:true}
-  }
+   
   
   
 ];
