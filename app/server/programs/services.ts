@@ -61,6 +61,35 @@ export const getProgramsByType = (
     [`programs-by-type-${type}`],
     { tags: ["programs"], revalidate: 3600 }
   )();
+  
+
+
+  export const getProgramById = (id: string) => {
+  const cachedFn = unstable_cache(
+    async () => {
+      try {
+        const result = await prisma.programs.findUnique({
+          where: { id },
+          
+        });
+        if (!result)
+          return { data: null, message: "Program not found", status: 409 };
+        return {
+          data: result,
+          message: "Program fetched successfully",
+          status: 200,
+        };
+      } catch (error) {
+        return { data: null, message: "Error fetching program", status: 500 };
+      }
+    },
+    [`program-by-id-${id}`],
+    { tags: ["programs"], revalidate: 3600 }
+  );
+
+  return cachedFn();
+};
+
 
 export const getProgramsByLocale = async (
   locale: Locale,
