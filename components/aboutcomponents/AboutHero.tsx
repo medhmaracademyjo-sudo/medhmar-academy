@@ -5,11 +5,11 @@ export default function AboutHero({ isAr }: { isAr: boolean }) {
   return (
     <section className="relative overflow-hidden bg-[#397a34] py-28 px-6 text-white flex flex-col items-center justify-center">
       <div className="container mx-auto relative z-10 text-center max-w-3xl pb-5">
-        <h1 className="text-4xl md:text-5xl font-extrabold mb-6">
+        <h1 className="text-4xl md:text-5xl font-extrabold mb-6 centert">
           {isAr ? "من نحن" : "About Us"}
         </h1>
 
-        <p className="text-lg md:text-xl opacity-90 leading-relaxed">
+        <p className="text-lg md:text-xl opacity-90 leading-relaxed centert" >
           {isAr
             ? "منصة تعليمية تهدف إلى تمكين المتعلمين من اكتساب مهارات جديدة بسهولة."
             : "An educational platform focused on empowering learners with modern and practical skills."}

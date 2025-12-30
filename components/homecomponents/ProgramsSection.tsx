@@ -1,17 +1,32 @@
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import Button2 from '../ui/Button2'
 
-interface Program {
-  title: string
-  description: string
-}
+type Locale = 'ar' | 'en'
 
-export default function ProgramsSection({ programs }: { programs: Program[] }) {
+export default function ProgramsSection({ locale }: { locale: Locale }) {
+
+  const isAr = locale === 'ar'
+
+  const programs = [
+    {
+      title: isAr ? 'البرامج الحياتية' : 'Life Programs',
+      description: isAr
+        ? 'مجموعة من البرامج التي تهدف إلى تطوير المهارات الشخصية، وتعزيز جودة الحياة، وبناء شخصية متوازنة وفعالة.'
+        : 'A collection of programs designed to develop personal skills, enhance quality of life, and build a balanced and effective personality.',
+    },
+    {
+      title: isAr ? 'البرامج المهنية' : 'Professional Programs',
+      description: isAr
+        ? 'برامج متخصصة تهدف إلى تطوير المهارات العملية والمهنية ورفع الكفاءة في سوق العمل.'
+        : 'Specialized programs aimed at developing practical and professional skills and increasing efficiency in the job market.',
+    },
+  ]
+
   return (
     <section className="bg-green-50">
       <div className="container mx-auto px-6 py-28">
         <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-16 text-[#397a34]">
-          Our Programs
+          {isAr ? 'برامجنا' : 'Our Programs'}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
@@ -36,20 +51,9 @@ export default function ProgramsSection({ programs }: { programs: Program[] }) {
                   {program.description}
                 </p>
 
-                <Button
-                  className="
-                    bg-[#397a34]
-                    text-white
-                    rounded-full
-                    px-8
-                    py-3
-                    font-semibold
-                    hover:bg-[#2f642b]
-                    transition
-                  "
-                >
-                  Explore Program
-                </Button>
+                <Button2>
+                  {isAr ? 'استعرض البرامج' : 'Explore Programs'}
+                </Button2>
               </CardContent>
             </Card>
           ))}

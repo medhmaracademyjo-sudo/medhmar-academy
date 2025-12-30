@@ -7,4 +7,9 @@
     "program1": "Professional Programs",
     "program2": "Life Programs"
   }
+  ,
+    "ProgramsSection": {
+    "title": "Our Programs",
+    "button": "Explore Program"
+  }
 }

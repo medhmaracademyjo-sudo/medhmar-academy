@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import Button1 from '../ui/Button1'
 
 export default function CTASection() {
   return (
@@ -11,16 +12,14 @@ export default function CTASection() {
           Join thousands of students and build skills that matter.
         </p>
         <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Button size="lg" className="bg-white text-[#397a34] hover:bg-green-100 w-full sm:w-auto">
+          <Button1 >
             Browse Courses
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="bg-white text-[#397a34] hover:bg-green-100 w-full sm:w-auto"
+          </Button1>
+          <Button1
+     
           >
             Become an Instructor
-          </Button>
+          </Button1>
         </div>
       </div>
     </section>

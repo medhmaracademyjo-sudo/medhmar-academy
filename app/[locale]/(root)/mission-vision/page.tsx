@@ -1,7 +1,8 @@
-import HeroSection from "@/components/missionvissioncomponents/HeroSection"
-import ValuesSection from "@/components/missionvissioncomponents/ValuesSection"
+import MissionVisionSection from "@/components/missionvissioncomponents/MissionVisionSection"
 import ObjectivesSection from "@/components/missionvissioncomponents/ObjectivesSection"
 import CTASection from "@/components/missionvissioncomponents/CTASection"
+import HeroSection from "@/components/missionvissioncomponents/HeroSection"
+
 type Locale = "en" | "ar"
 
 interface PageProps {
@@ -11,26 +12,16 @@ interface PageProps {
 }
 
 export default async function Page({ params }: PageProps) {
-  const { locale } =  await params
-  const isAr = locale === 'ar'
+  const { locale } = await params
+  const isAr = locale === "ar"
 
   return (
-    <div
-      className="min-h-screen bg-green-50 text-gray-900"
-      dir={isAr ? "rtl" : "ltr"}
-    >
-      {/* Hero */}
-      <HeroSection isAr={isAr} />
+    <div className="min-h-screen bg-green-50 text-gray-900" dir={isAr ? "rtl" : "ltr"}>
+            <HeroSection isAr={isAr} />
 
-      {/* Values */}
-      <ValuesSection isAr={isAr} />
-
-      {/* Objectives */}
-   ,<ObjectivesSection isAr={isAr}/>
-      {/* Call To Action */}
+      <MissionVisionSection isAr={isAr} />
+      <ObjectivesSection isAr={isAr} />
       <CTASection isAr={isAr} />
-
-
     </div>
   )
 }

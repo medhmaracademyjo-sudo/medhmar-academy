@@ -6,6 +6,7 @@ import { FolderOpen } from "lucide-react";
 import { getProgramNameAndIdById } from "@/app/server/programs/services";
 import ApplicationsFilter from "@/components/aplications/ApplicationsFilter"
 import { ApplicationsDataTable } from "@/components/Applications-data-table";
+import ExportButton from "@/components/ExportButton";
 
 interface Props {
   searchParams: Promise<{
@@ -13,6 +14,7 @@ interface Props {
   gender?: "male" | "female" | null;
   minAge?: number | null; 
   maxAge?: number | null; 
+  applicationId?:string|null,
     page?:number
   }>;
   params: Promise<{ id: string }>;
@@ -28,6 +30,7 @@ async function page({ params, searchParams }: Props) {
     location: searchParamsData.location ?? null,
     minAge: searchParamsData.minAge ? Number(searchParamsData.minAge) : null,
     maxAge: searchParamsData.maxAge ? Number(searchParamsData.maxAge) : null,
+    applicationId: searchParamsData.applicationId ?? null,
   };
 
   const programDetails= (await getProgramNameAndIdById(id)).data
@@ -42,7 +45,11 @@ async function page({ params, searchParams }: Props) {
   initialGender={searchParamsData.gender ?? null}   
   initialMinAge={searchParamsData.minAge ?? undefined}  
   initialMaxAge={searchParamsData.maxAge ?? undefined}
+  
 />
+
+<div className="mt-4 mb-4 flex items-center gap-3">
+</div>
 
        {filteredData.data.length === 0 ? (
         <Card className="w-full h-64 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 bg-gray-50">
@@ -59,9 +66,15 @@ async function page({ params, searchParams }: Props) {
           <ApplicationsDataTable
             columns={ApplicationColumns}
             data={filteredData.data}
-            routeName="ourTeam"
+            routeName="applicationById"
             deleteAction={deleteApplicationAction}
             totalPages={filteredData.totalPages}
+             programId={id}
+    location={searchParamsData.location ?? null}
+    gender={searchParamsData.gender ?? null}
+    minAge={searchParamsData.minAge ?? undefined}
+    maxAge={searchParamsData.maxAge ?? undefined}
+    applicationId={searchParamsData.applicationId ?? null}
           />
          
 

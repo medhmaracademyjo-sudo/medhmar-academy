@@ -31,9 +31,12 @@ export const applicationSchema = (locale: Locale) =>
           : "المستوى التعليمي مطلوب"
       ),
 
-    program_id: z
+    life_program_id: z
       .string()
-      .min(1, locale === "en" ? "Program is required" : "البرنامج مطلوب"),
+      .min(1, locale === "en" ? "Life Program is required" : "البرنامج الحياتي مطلوب"),
+      professional_programs_id: z
+      .string()
+      .min(1, locale === "en" ? "Professional Program is required" : "البرنامج مهني مطلوب"),
 
     major: z
       .string()

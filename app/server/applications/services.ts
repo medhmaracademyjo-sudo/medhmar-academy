@@ -1,20 +1,51 @@
-
 import prisma from "@/lib/prisma";
-import { NewApplication } from "@/types";
+import {  NewApplicationForm } from "@/types";
 import { revalidateTag, unstable_cache } from "next/cache";
 
-export const addNewApplcation = async (data: NewApplication) => {
+export const addNewApplcation = async (data: NewApplicationForm) => {
   try {
-    const result = await prisma.applications.create({ data });
+    await prisma.applications.createMany({
+      data: [
+        {
+          name: data.name,
+          gender: data.gender,
+          phone_number: data.phone_number,
+          location: data.location,
+          date_of_birth: new Date(data.date_of_birth),
+          education_level: data.education_level,
+          email: data.email,
+          major: data.major,
+          program_id: data.life_program_id,
+        },
+        {
+          name: data.name,
+          gender: data.gender,
+          phone_number: data.phone_number,
+          location: data.location,
+          date_of_birth: new Date(data.date_of_birth),
+          education_level: data.education_level,
+          email: data.email,
+          major: data.major,
+          program_id: data.professional_programs_id,
+        },
+      ],
+    });
+    console.log("test query");
+
+revalidateTag("programs","max")
     revalidateTag("applications", "max");
     return {
-      data: result,
+      success: true,
       message: "Application submitted successfully",
       status: 201,
     };
   } catch (error) {
+    console.log("error in: ",error);
+    
     return {
-      data: null,
+      
+      
+      success: false,
       message: "Error In Submitting The Application",
       status: 500,
     };
@@ -24,18 +55,18 @@ export const addNewApplcation = async (data: NewApplication) => {
 export const getAllApplication = async (pageNumber: number) =>
   unstable_cache(
     async () => {
-      const pageSize=10
+      const pageSize = 10;
       const skip = (pageNumber - 1) * pageSize;
       const take = 10;
 
       try {
         const [result, total] = await Promise.all([
-           prisma.applications.findMany({
+          prisma.applications.findMany({
             skip,
             take,
             orderBy: { created_at: "desc" },
             select: {
-              id:true,
+              id: true,
               name: true,
               email: true,
               location: true,
@@ -84,7 +115,7 @@ export const deleteApplicationById = async (id: string) => {
       where: { id },
     });
 
-    revalidateTag("applications","max");
+    revalidateTag("applications", "max");
 
     return {
       success: true,
@@ -102,13 +133,13 @@ export const deleteApplicationById = async (id: string) => {
   }
 };
 
-
 export const getApplicationById = (id: string) =>
   unstable_cache(
     async () => {
       try {
         const result = await prisma.applications.findUnique({
           where: { id },
+          include:{programs:true}
         });
 
         if (!result) {
@@ -134,42 +165,55 @@ export const getApplicationById = (id: string) =>
         };
       }
     },
-    [`application-by-id-${id}`], 
+    [`application-by-id-${id}`],
     {
       tags: ["applications"],
       revalidate: 3600,
     }
   )();
 
-
-
 type ApplicationFilters = {
   programId?: string | null;
   location?: string | null;
   gender?: "male" | "female" | null;
-  minAge?: number | null; 
-  maxAge?: number | null; 
+  minAge?: number | null;
+  maxAge?: number | null;
+  applicationId?:string |null
 };
 
 const DEFAULT_PAGE_SIZE = 10;
 
-function birthdateBoundsFromAges(minAge?: number | null, maxAge?: number | null) {
+function birthdateBoundsFromAges(
+  minAge?: number | null,
+  maxAge?: number | null
+) {
   const today = new Date();
   if (minAge == null && maxAge == null) return null;
 
-  const lower = maxAge != null
-    ? new Date(today.getFullYear() - maxAge, today.getMonth(), today.getDate())
-    : undefined;
+  const lower =
+    maxAge != null
+      ? new Date(
+          today.getFullYear() - maxAge,
+          today.getMonth(),
+          today.getDate()
+        )
+      : undefined;
 
-  const upper = minAge != null
-    ? new Date(today.getFullYear() - minAge, today.getMonth(), today.getDate())
-    : undefined;
+  const upper =
+    minAge != null
+      ? new Date(
+          today.getFullYear() - minAge,
+          today.getMonth(),
+          today.getDate()
+        )
+      : undefined;
 
   return { lower, upper };
 }
 
-type ApplicationsWhereInput =
-  NonNullable<Parameters<typeof prisma.applications.findMany>[0]>["where"];
+type ApplicationsWhereInput = NonNullable<
+  Parameters<typeof prisma.applications.findMany>[0]
+>["where"];
 
 export const getAllApplicationsByFilters = (
   pageNumber = 1,
@@ -182,7 +226,7 @@ export const getAllApplicationsByFilters = (
       const skip = (page - 1) * pageSize;
 
       // Use the correct Prisma type
-      const where:ApplicationsWhereInput = {};
+      const where: ApplicationsWhereInput = {};
 
       if (filters?.programId) {
         where.program_id = filters.programId;
@@ -192,9 +236,14 @@ export const getAllApplicationsByFilters = (
         where.gender = filters.gender;
       }
 
+       if (filters?.applicationId) {
+        where.id = filters.applicationId;
+      }
+
       if (filters?.location) {
         where.location = { contains: filters.location, mode: "insensitive" };
       }
+      
 
       const bounds = birthdateBoundsFromAges(filters?.minAge, filters?.maxAge);
       if (bounds) {
@@ -211,15 +260,7 @@ export const getAllApplicationsByFilters = (
             skip,
             take: pageSize,
             orderBy: { created_at: "desc" },
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              location: true,
-              gender: true,
-              created_at: true,
-              date_of_birth: true,
-            },
+            include:{programs:{select:{program_title_en:true,}}}
           }),
           prisma.applications.count({ where }),
         ]);
@@ -242,9 +283,10 @@ export const getAllApplicationsByFilters = (
         };
       }
     },
-    [`applications-page-${pageNumber}-ps-${pageSize}-f-${JSON.stringify(filters ?? {})}`],
+    [
+      `applications-page-${pageNumber}-ps-${pageSize}-f-${JSON.stringify(
+        filters ?? {}
+      )}`,
+    ],
     { tags: ["applications"], revalidate: 60 }
   )();
-
-
-  

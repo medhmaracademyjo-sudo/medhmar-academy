@@ -39,10 +39,19 @@ async function page() {
                     height={50}
                     className="w-full h-full object-contain"
                   />
+                  
                 </div>
                 <div className="text-sm font-medium truncate max-w-36 mt-2">
                   {program.program_title_en}
                 </div>
+                <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
+  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full
+                   bg-[#397a34]/10 text-[#397a34] font-semibold">
+    {program.applications.length}
+  </span>
+  <span className="whitespace-nowrap">Applications</span>
+</div>
+
               </Link>
             ))}
           </div>
@@ -72,6 +81,14 @@ async function page() {
                 <div className="text-sm font-medium truncate max-w-36 mt-2">
                   {program.program_title_en}
                 </div>
+                <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
+  <span className="inline-flex items-center justify-center px-2.5 py-1 rounded-full
+                   bg-[#397a34]/10 text-[#397a34] font-semibold">
+    {program.applications.length}
+  </span>
+  <span className="whitespace-nowrap">Applications</span>
+</div>
+
               </Link>
             ))}
           </div>

@@ -11,6 +11,8 @@ import { loginSchema } from "@/app/server/users/validators";
 import { toast } from "sonner";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import EmailInput from "@/components/inputs/EmailInput";
+import Button2 from "@/components/ui/Button2";
+import Button1 from "@/components/ui/Button1";
 type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
@@ -27,7 +29,7 @@ const Login = () => {
     setLoading(true);
     try {
       const result = await signIn("credentials", {
-        callbackUrl:"/",
+        callbackUrl: "/",
         email: data.email,
         password: data.password,
       });
@@ -50,7 +52,7 @@ const Login = () => {
         className="max-w-lg mx-auto shadow-lg shadow-slate-500/50 p-7 rounded-lg bg-white dark:bg-gray-300 mt-28 mb-20"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <h1 className="text-2xl flex justify-center border-b-2 border-[#676e32] mb-4 pb-2 dark:text-black">
+        <h1 className="text-2xl flex justify-center border-b-2 border-[#397a34] mb-4 pb-2 dark:text-black">
           Login
         </h1>
         <EmailInput
@@ -63,36 +65,33 @@ const Login = () => {
           label="Password"
           error={errors.password}
         />
-        <button
-          disabled={loading}
-          type="submit"
-          className="text-white bg-[#676e32] hover:bg-[#848e38] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-sm w-full px-5 py-2.5 text-center cursor-pointer"
-        >
+        <Button2 type="submit" disabled={loading} className="w-full px-4 py-2">
           {loading ? "Logging in..." : "Login"}
-        </button>
+        </Button2>
+
         <Link
           href="/forgot-password"
-          className="block pt-4 text-center text-sm text-[#676e32] underline-offset-4 hover:underline m-2"
+          className="block pt-4 text-center text-sm text-[#397a34] underline-offset-4 hover:underline m-2"
         >
           Forgot your password?
         </Link>
 
         <div className="my-2 flex w-auto items-center">
           <div className="bg-border h-px flex-1"></div>
-          <span className="mx-2 font-black text-[#676e32]">OR</span>
+          <span className="mx-2 font-black text-[#397a34]">OR</span>
           <div className="bg-border h-px flex-1"></div>
         </div>
-        <button
+        <Button1
           type="button"
+          className="w-full mt-3 flex justify-center items-center gap-2 px-5 py-2 text-sm font-medium"
           onClick={handleGoogleSignIn}
-          className="w-full mt-3 flex justify-center cursor-pointer items-center gap-2 px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200"
         >
-          <FcGoogle className="w-5 h-5" />
+          <FcGoogle className="w-5 h-5 " />
           Login with Google
-        </button>
+        </Button1>
         <Link
           href="/register"
-          className="block pt-4 text-center text-sm underline-offset-4 text-[#676e32] hover:underline m-2"
+          className="block pt-4 text-center text-sm underline-offset-4 text-[#397a34] hover:underline m-2"
         >
           Don`t have an account?
         </Link>

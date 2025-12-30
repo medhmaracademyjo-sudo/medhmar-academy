@@ -30,6 +30,7 @@ export async function editMemberAction(memberId:string,data: Partial<NewMember>)
 
     if (result.status === 201) {
       revalidatePath(`/admin/dashboard/ourTeam`);
+      revalidatePath(`/ar/admin/dashboard/ourTeam`);
       return { success: true, message: result.message, status: result.status };
     }
     return { success: false, message: result.message, status: result.status };

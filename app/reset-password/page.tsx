@@ -9,6 +9,7 @@ import * as z from "zod";
 import { resetPasswordAction } from "./(actions)/resetPasswordAction";
 import PasswordInput from "@/components/inputs/PasswordInput";
 import { toast } from "sonner";
+import Button2 from "@/components/ui/Button2";
 
 // Validation schema
 const resetPasswordSchema = z
@@ -80,18 +81,17 @@ function ResetPasswordPage() {
           label="Confirm Password"
         />
         {/* Submit */}
-        <button
-          disabled={isSubmitting}
-          type="submit"
-          className="text-white bg-[#676e32] hover:bg-[#848e38] focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center cursor-pointer"
-        >
-          {isSubmitting ? "Resetting..." : "Reset"}
-        </button>
+        <Button2 disabled={isSubmitting}
+        className="w-full px-5 py-2.5"
+          type="submit">
+{isSubmitting ? "Resetting..." : "Reset"}
+        </Button2>
+       
 
         {/* Back Link */}
         <Link
           href="/login"
-          className="block pt-4 text-center text-sm text-[#676e32] underline-offset-4 hover:underline m-2"
+          className="block pt-4 text-center text-sm text-[#397a34] underline-offset-4 hover:underline m-2"
         >
           Back To Login
         </Link>

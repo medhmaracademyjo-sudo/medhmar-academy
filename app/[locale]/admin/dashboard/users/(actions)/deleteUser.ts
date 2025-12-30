@@ -21,6 +21,7 @@ export async function deleteUserAction(userId: string) {
 
     const result = await deleteUser(userId);
     revalidatePath(`/admin/dashboard/users`);
+    revalidatePath(`/ar/admin/dashboard/users`);
     if (result.status !== 201)
       return {
         message: result.message,

@@ -17,6 +17,8 @@ import { NewMemberSchema } from "@/app/server/our_team/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../inputs/TextInput";
 import TextareaInput from "../inputs/TextareaInput";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 import FormSelect from "../inputs/SelectorInput";
 interface Props {
     member:NewMember | null
@@ -176,23 +178,18 @@ export default function EditMemberForm({ action,member }: Props) {
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+              {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-                  onClick={() => router.replace("/admin/dashboard/ourTeam")}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#89971b]"
-                  disabled={isPending}
-                >
-                  {isPending ? "Saving..." : "Save Change"}
-                </button>
+                <Button1 type="button"
+                  onClick={() => router.replace("/admin/dashboard/ourTeam")}>Cancel</Button1>
+                <Button2 type="submit"
+                  disabled={isPending}> {isPending ? "Saving..." : "Save Change"}</Button2>
               </div>
             </div>
           </CardContent>

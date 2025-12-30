@@ -7,6 +7,7 @@ export async function getMemberIdAction() {
     const result = await getMemberNameIdAndImage();
     if (result.status === 200) {
       revalidatePath(`/admin/dashboard/ourTeam`);
+      revalidatePath(`/ar/admin/dashboard/ourTeam`);
       return { success:true,message: result.message, status: result.status };
     }
 

@@ -21,6 +21,8 @@ import { FolderOpen } from "lucide-react";
 import FormSelect from "../inputs/SelectorInput";
 import CheckboxInput from "../inputs/CheckBox";
 import { saudiCitiesAr, saudiCitiesEn } from "@/app/constants/saudiCities";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 interface Props {
   program: NewProgram | null;
   action: (
@@ -50,8 +52,6 @@ export default function EditProgramForm({
       program_description_en: program?.program_description_en ?? "",
       program_description_ar: program?.program_description_ar ?? "",
       image: program?.image ?? "",
-      program_location_en: program?.program_location_en ?? "",
-      program_location_ar: program?.program_location_ar ?? "",
       duration_h: program?.duration_h ?? "",
       duration_d: program?.duration_d ?? "",
       feature:program?.feature??false,
@@ -133,7 +133,7 @@ export default function EditProgramForm({
         onSubmit={handleSubmit(onSubmit)}
         className="h-full w-full lg:w-[70vw] flex flex-col gap-5"
       >
-        <Card className="w-full h-full">
+        <Card className="w-full h-full pt-10">
           <CardHeader>
             <CardTitle>Edit Program Details</CardTitle>
             <CardDescription>
@@ -200,28 +200,6 @@ export default function EditProgramForm({
                            className="lg:w-[19.5vw] w-full"
                          />
                        </div>
-            <div className="flex flex-col lg:flex-row w-full gap-4">
-              <FormSelect
-                name="program_location_en"
-                label="English Location "
-                control={control}
-                options={saudiCitiesEn}
-                error={errors.program_location_en}
-                placeholder="Select Location"
-                triggerClassName="w-full text-md"
-                className="lg:w-[19.5vw] w-full"
-              />
-              <FormSelect
-                name="program_location_ar"
-                label="Arabic Location"
-                control={control}
-                options={saudiCitiesAr}
-                error={errors.program_location_ar}
-                placeholder="Select Location"
-                triggerClassName="w-full text-md"
-                className="lg:w-[19.5vw] w-full"
-              />
-            </div>
             <div className="flex flex-col w-full max-w-sm">
               <label className="text-base text-black mb-1">Program Image</label>
               <ImageUploader
@@ -230,25 +208,25 @@ export default function EditProgramForm({
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+               {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
-             <CheckboxInput register={register("feature")} label="Feature" error={errors.feature}/>
+             <CheckboxInput register={register("feature")} label="Feature Program?" error={errors.feature}/>
 
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-                  onClick={() => router.replace("/admin/dashboard/program")}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#89971b]"
-                  disabled={isPending}
-                >
-                  {isPending ? "Adding..." : "Add Program"}
-                </button>
+                <Button1
+                                  type="button"
+                                  onClick={() => router.replace("/admin/dashboard/program")}
+                                >
+                                  Cancel
+                                </Button1>
+                                <Button2 type="submit" disabled={isPending}>
+                                  {isPending ? "Saving..." : "Save Change"}
+                                </Button2>
               </div>
             </div>
           </CardContent>

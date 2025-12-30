@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../inputs/TextInput";
 import TextareaInput from "../inputs/TextareaInput";
 import FormSelect from "../inputs/SelectorInput";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 interface Props {
   action: (
     data: NewMember
@@ -83,7 +85,7 @@ export default function AddMemberForm({ action }: Props) {
         onSubmit={handleSubmit(onSubmit)}
         className="h-full w-full lg:w-[70vw] flex flex-col gap-5"
       >
-        <Card className="w-full h-full">
+        <Card className="w-full h-full pt-10">
           <CardHeader>
             <CardTitle>New Member Details</CardTitle>
             <CardDescription>
@@ -93,12 +95,12 @@ export default function AddMemberForm({ action }: Props) {
 
           <CardContent className="flex flex-col items-start gap-5 mb-7 ">
             <FormSelect
-            name="member_type"
-            error={errors.member_type}
-                placeholder="Select Member Type"
-                triggerClassName="w-full text-md"
-                className="lg:w-[19.5vw] w-full"
-            label=" Member Type"
+              name="member_type"
+              error={errors.member_type}
+              placeholder="Select Member Type"
+              triggerClassName="w-full text-md"
+              className="lg:w-[19.5vw] w-full"
+              label=" Member Type"
               control={control}
               options={[
                 {
@@ -163,23 +165,24 @@ export default function AddMemberForm({ action }: Props) {
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+              {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">
-                <button
+                <Button1
                   type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
                   onClick={() => router.replace("/admin/dashboard/ourTeam")}
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#89971b]"
-                  disabled={isPending}
-                >
-                  {isPending ? "Adding..." : "Add Member"}
-                </button>
+                </Button1>
+
+                <Button2 type="submit" disabled={isPending}>
+                  {isPending ? "Adding..." : "Add Member"}{" "}
+                </Button2>
               </div>
             </div>
           </CardContent>

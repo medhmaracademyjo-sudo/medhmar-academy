@@ -1,8 +1,7 @@
 import {
   UserCheck,
   Home,
-
-  Search,
+  Crown,
   User2,
   ChevronUp,
   Users,
@@ -10,6 +9,7 @@ import {
   Ticket,
   BookOpenCheck,
   ClipboardPenIcon,
+  Settings,
 } from "lucide-react";
 
 import {
@@ -52,11 +52,6 @@ const items = [
     icon: Ticket,
   },
   {
-    title: "Categories",
-    url: "/admin/dashboard/category",
-    icon: Search,
-  },
-  {
     title: "Programs",
     url: "/admin/dashboard/program",
     icon: BookOpenCheck,
@@ -67,16 +62,23 @@ const items = [
     icon: ClipboardPenIcon,
   },
   { title: "My Team", url: "/admin/dashboard/ourTeam", icon: Users },
+    { title: "Clients", url: "/admin/dashboard/clients", icon: Crown },
+
+   {
+    title: "Settings",
+    url: "/admin/dashboard/settings",
+    icon: Settings,
+  },
 ];
 
 export async function AppSidebar() {
   const session = await getServerSession(authOptions);
   const userName = session?.user.firstName;
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Admin Dashboard</SidebarGroupLabel>
           <span className="border text-black rounded mb-2.5"></span>
           <SidebarGroupContent>
             <SidebarMenu>

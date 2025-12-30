@@ -28,6 +28,7 @@ export async function deleteApplicationAction(applicationId:string) {
       const result = await deleteApplicationById(applicationId);
       if (result.status === 201) {
         revalidatePath(`/admin/dashboard/application`);
+        revalidatePath(`/ar/admin/dashboard/application`);
         return {success:true, message: result.message, status: result.status };
       }
       return {success:false, message: result.message, status: result.status };

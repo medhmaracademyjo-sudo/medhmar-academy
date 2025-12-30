@@ -28,6 +28,7 @@ export async function deleteProgramAction(programId:string) {
       const result = await deleteProgram(programId);
       if (result.status === 201) {
         revalidatePath(`/admin/dashboard/program`);
+      revalidatePath(`/ar/admin/dashboard/program`);
         return {success:true, message: result.message, status: result.status };
       }
       return {success:false, message: result.message, status: result.status };

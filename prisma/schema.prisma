@@ -55,8 +55,6 @@ model programs {
   program_title_ar       String         @db.VarChar(255)
   program_description_en String?
   program_description_ar String?
-  program_location_en    String?        @db.VarChar(255)
-  program_location_ar    String?        @db.VarChar(255)
   duration_h             String         @db.VarChar(255)
   slug                   String         @unique @db.VarChar(255)
   image                  String?        @db.VarChar(255)
@@ -77,6 +75,21 @@ model our_team {
   position_ar    String       @db.VarChar(255)
   image          String?      @db.VarChar(255)
   display_order  Int?
+}
+
+model clients {
+  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name_en String @db.VarChar(255)
+  logo    String @db.VarChar(255)
+  name_ar String @db.VarChar(255)
+}
+
+model settings {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  key_name_en String? @db.VarChar(255)
+  key_name_ar String? @db.VarChar(255)
+  value_en    String?
+  value_ar    String?
 }
 
 enum role {

@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import  {  useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import z from "zod";
 import { toast } from "sonner";
@@ -17,8 +17,12 @@ import { bannerSchema } from "@/app/server/banners/validators";
 import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../inputs/TextInput";
 import TextareaInput from "../inputs/TextareaInput";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 interface Props {
-  action: (data:NewBanner) => Promise<{success:boolean, message:string, status:number}>;
+  action: (
+    data: NewBanner
+  ) => Promise<{ success: boolean; message: string; status: number }>;
 }
 type BannerFormValues = z.infer<typeof bannerSchema>;
 
@@ -36,8 +40,7 @@ export default function AddBannerForm({ action }: Props) {
   const [isPending, startTransition] = useTransition();
 
   const handleUploadComplete = (url: string) => {
-    setValue("image",url,{shouldValidate:true})
-
+    setValue("image", url, { shouldValidate: true });
   };
 
   const handleUploadError = (error: Error) => {
@@ -45,12 +48,11 @@ export default function AddBannerForm({ action }: Props) {
     toast.error(`Upload failed: ${error.message}`);
   };
 
-
   const onSubmit: SubmitHandler<BannerFormValues> = async (data) => {
     startTransition(async () => {
       try {
         const result = await action(data);
-         if (result.status === 401) {
+        if (result.status === 401) {
           toast.error(result.message);
           router.push("/login");
           return;
@@ -81,7 +83,7 @@ export default function AddBannerForm({ action }: Props) {
         onSubmit={handleSubmit(onSubmit)}
         className="h-full w-full lg:w-[70vw] flex flex-col gap-5"
       >
-        <Card className="w-full h-full">
+        <Card className="w-full h-full pt-10">
           <CardHeader>
             <CardTitle>New Banner Details</CardTitle>
             <CardDescription>
@@ -117,24 +119,25 @@ export default function AddBannerForm({ action }: Props) {
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+              {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
 
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-                  onClick={() => router.replace("/admin/dashboard/banners")}
+                <Button1
+                type="button"
+                  onClick={() => router.replace("/admin/dashboard/banner")}
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#89971b]"
-                  disabled={isPending}
-                >
+                </Button1>
+
+                <Button2 type="submit" disabled={isPending}>
                   {isPending ? "Adding..." : "Add Banner"}
-                </button>
+                </Button2>
               </div>
             </div>
           </CardContent>

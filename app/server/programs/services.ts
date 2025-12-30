@@ -1,9 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Locale, NewProgram, translatedProgram } from "@/types";
-import { error } from "console";
 import { unstable_cache, revalidateTag } from "next/cache";
 
-// إضافة برنامج جديد
 export const addNewProgram = async (data: NewProgram) => {
   try {
     const result = await prisma.programs.create({
@@ -11,7 +9,6 @@ export const addNewProgram = async (data: NewProgram) => {
     });
 
     revalidateTag("programs", "max");
-
     return { data: result, message: "Program Added Successfully", status: 201 };
   } catch (error) {
     return { data: error, message: "Error In Adding The Program", status: 500 };
@@ -61,16 +58,13 @@ export const getProgramsByType = (
     [`programs-by-type-${type}`],
     { tags: ["programs"], revalidate: 3600 }
   )();
-  
 
-
-  export const getProgramById = (id: string) => {
+export const getProgramById = (id: string) => {
   const cachedFn = unstable_cache(
     async () => {
       try {
         const result = await prisma.programs.findUnique({
           where: { id },
-          
         });
         if (!result)
           return { data: null, message: "Program not found", status: 409 };
@@ -90,7 +84,6 @@ export const getProgramsByType = (
   return cachedFn();
 };
 
-
 export const getProgramsByLocale = async (
   locale: Locale,
   program_type?: "life_programs" | "professional_programs"
@@ -108,10 +101,7 @@ export const getProgramsByLocale = async (
           locale === "en"
             ? program.program_description_en
             : program.program_description_ar,
-        program_location:
-          locale === "en"
-            ? program.program_location_en
-            : program.program_location_ar,
+   
         slug: program.slug,
         image: program.image,
         program_type: program.program_type,
@@ -168,10 +158,7 @@ export const getProgramBySlugAndLocale = (slug: string, locale: Locale) =>
             locale === "en"
               ? program.program_description_en
               : program.program_description_ar,
-          program_location:
-            locale === "en"
-              ? program.program_location_en
-              : program.program_location_ar,
+        
           slug: program.slug,
           image: program.image,
           program_type: program.program_type,
@@ -184,10 +171,13 @@ export const getProgramBySlugAndLocale = (slug: string, locale: Locale) =>
           message: "Program fetched successfully",
           status: 200,
         };
-      } catch(error) {
-        return { data: error, message: "Error fetching program", status: 500 };
-     
-      }
+      }catch {
+  return {
+    data: null,
+    message: "Error fetching program",
+    status: 500,
+  };
+}
     },
     [`program-by-slug-locale-${slug}-${locale}`],
     { tags: ["programs"], revalidate: 3600 }
@@ -214,8 +204,12 @@ export const updateProgram = async (id: string, data: Partial<NewProgram>) => {
 };
 
 export const deleteProgram = async (id: string) => {
+  console.log("ffgfgg: ", id);
+
   try {
     const existing = await prisma.programs.findUnique({ where: { id } });
+    console.log("existing: ", existing);
+
     if (!existing)
       return { data: null, message: "Program not found", status: 409 };
 
@@ -228,6 +222,54 @@ export const deleteProgram = async (id: string) => {
       status: 201,
     };
   } catch (error) {
+    console.log("error: ", error);
+
     return { data: error, message: "Error deleting program", status: 500 };
   }
 };
+
+
+
+export const getFeaturedProgramsByLocale = (locale: Locale) =>
+  unstable_cache(
+    async () => {
+      try {
+        const programs = await prisma.programs.findMany({
+          where: { feature: true },
+        });
+
+        const translatedPrograms: translatedProgram[] = programs.map(
+          (program) => ({
+            program_title:
+              locale === "en"
+                ? program.program_title_en
+                : program.program_title_ar,
+            program_description:
+              locale === "en"
+                ? program.program_description_en
+                : program.program_description_ar,
+       
+            slug: program.slug,
+            image: program.image,
+            program_type: program.program_type,
+            duration_h: program.duration_h,
+            duration_d: program.duration_d,
+          })
+        );
+
+        return {
+          data: translatedPrograms,
+          message: "Featured programs fetched successfully",
+          status: 200,
+        };
+      } catch {
+        return {
+          data: [],
+          message: "Error fetching featured programs",
+          status: 500,
+        };
+      }
+    },
+    [`featured-programs-${locale}`],
+    { tags: ["programs"], revalidate: 3600 }
+  )();

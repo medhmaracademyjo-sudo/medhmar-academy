@@ -20,6 +20,8 @@ import { CSS } from "@dnd-kit/utilities";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { MemberOrder } from "@/types";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 
 export type Member = {
   id: string;
@@ -30,14 +32,17 @@ export type Member = {
 
 type Props = {
   // action must return a Promise<{ success:boolean, status:number, message:string }>
-  action: (data: MemberOrder[]) => Promise<{ success: boolean; status: number; message: string }>;
+  action: (
+    data: MemberOrder[]
+  ) => Promise<{ success: boolean; status: number; message: string }>;
   initialMembers?: Member[];
   saving?: boolean;
 };
 
 // Sortable card
 function SortableItem({ member }: { member: Member }) {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: member.id });
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: member.id });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -72,7 +77,9 @@ function SortableItem({ member }: { member: Member }) {
 
         <div className="flex-1 min-w-0">
           <div className="text-base font-medium truncate">{member.name_en}</div>
-          <div className="text-sm text-gray-400 truncate">#{member.display_order ?? "—"}</div>
+          <div className="text-sm text-gray-400 truncate">
+            #{member.display_order ?? "—"}
+          </div>
         </div>
 
         <div className="text-gray-400 text-xl select-none" aria-hidden>
@@ -83,12 +90,18 @@ function SortableItem({ member }: { member: Member }) {
   );
 }
 
-export default function MemberReorder({ initialMembers = [], action, saving: externalSaving }: Props) {
+export default function MemberReorder({
+  initialMembers = [],
+  action,
+  saving: externalSaving,
+}: Props) {
   const router = useRouter();
 
   // local members state (safe copy and sorted)
-  const [members, setMembers] = useState<Member[]>(
-    () => (initialMembers ?? []).slice().sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
+  const [members, setMembers] = useState<Member[]>(() =>
+    (initialMembers ?? [])
+      .slice()
+      .sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0))
   );
   const originalRef = useRef<Member[]>(members);
 
@@ -96,11 +109,12 @@ export default function MemberReorder({ initialMembers = [], action, saving: ext
   const [isSaving, setIsSaving] = useState(false);
 
   // sensors must be created at top-level
- const sensors = useSensors(
-  useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
-  useSensor(TouchSensor, { activationConstraint: { delay: 150, tolerance: 5 } })
-);
-
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 150, tolerance: 5 },
+    })
+  );
 
   // handle drag end -> only update local UI (no server call here)
   const handleDragEnd = (e: DragEndEvent) => {
@@ -112,7 +126,10 @@ export default function MemberReorder({ initialMembers = [], action, saving: ext
     if (oldIndex === -1 || newIndex === -1) return;
 
     const newList = arrayMove(members, oldIndex, newIndex);
-    const reordered = newList.map((m, index) => ({ ...m, display_order: index + 1 }));
+    const reordered = newList.map((m, index) => ({
+      ...m,
+      display_order: index + 1,
+    }));
 
     // update local list for immediate visual feedback
     setMembers(reordered);
@@ -121,7 +138,10 @@ export default function MemberReorder({ initialMembers = [], action, saving: ext
   // Save button handler: call action (must return Promise)
   const handleSaveOrder = async () => {
     // prepare payload from current local state
-    const payload: MemberOrder[] = members.map((m) => ({ id: m.id, display_order: m.display_order ?? 0 }));
+    const payload: MemberOrder[] = members.map((m) => ({
+      id: m.id,
+      display_order: m.display_order ?? 0,
+    }));
 
     setIsSaving(true);
     try {
@@ -156,15 +176,26 @@ export default function MemberReorder({ initialMembers = [], action, saving: ext
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-2xl font-semibold">Team Members</h3>
-          <p className="text-sm text-gray-500">Drag cards to reorder. Click <span className="font-medium">Save Order</span> to persist.</p>
+          <p className="text-sm text-gray-500">
+            Drag cards to reorder. Click{" "}
+            <span className="font-medium">Save Order</span> to persist.
+          </p>
         </div>
-
-     
       </div>
 
-      <div className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm" style={{ touchAction: "none" }}>
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <SortableContext items={members.map((m) => m.id)} strategy={rectSortingStrategy}>
+      <div
+        className="bg-white rounded-xl p-4 border border-gray-100 shadow-sm"
+        style={{ touchAction: "none" }}
+      >
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+        >
+          <SortableContext
+            items={members.map((m) => m.id)}
+            strategy={rectSortingStrategy}
+          >
             <ul className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {members.map((member) => (
                 <SortableItem key={member.id} member={member} />
@@ -172,29 +203,20 @@ export default function MemberReorder({ initialMembers = [], action, saving: ext
             </ul>
           </SortableContext>
         </DndContext>
-        
       </div>
-         <div className="flex items-center gap-3 mt-5 flex-row justify-end">
-          <button
-            type="button"
-            onClick={handleCancel}
-            className="px-4 py-2 border rounded-md bg-white hover:bg-gray-50"
-            disabled={saving}
-          >
-            Cancel
-          </button>
+      <div className="flex items-center gap-3 mt-5 flex-row justify-end">
+        <Button1 type="button" onClick={handleCancel} disabled={saving}>
+          Cancel
+        </Button1>
+        <Button2 type="button" onClick={handleSaveOrder} disabled={saving}>
+          {" "}
+          {saving ? "Saving..." : "Save Order"}
+        </Button2>
+      </div>
 
-          <button
-            type="button"
-            onClick={handleSaveOrder}
-            className={`px-4 py-2 rounded-md text-white ${saving ? "bg-gray-400" : "bg-[#47692b] hover:bg-[#5f7f2f]"}`}
-            disabled={saving}
-          >
-            {saving ? "Saving..." : "Save Order"}
-          </button>
-        </div>
-
-      <div className="mt-3 text-sm text-gray-400">Tip: drag any card to reorder. Use the Save button to persist changes.</div>
+      <div className="mt-3 text-sm text-gray-400">
+        Tip: drag any card to reorder. Use the Save button to persist changes.
+      </div>
     </div>
   );
 }

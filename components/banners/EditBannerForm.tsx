@@ -18,6 +18,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "@/components/inputs/TextInput";
 import TextareaInput from "@/components/inputs/TextareaInput";
 import { FolderOpen } from "lucide-react";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 interface Props {
   banner: NewBanner | null;
   action: (
@@ -104,7 +106,7 @@ export default function EditBannerForm({ banner, action }: Props) {
         onSubmit={handleSubmit(onSubmit)}
         className="h-full w-full lg:w-[70vw] flex flex-col gap-5"
       >
-        <Card className="w-full h-full">
+        <Card className="w-full h-full pt-10">
           <CardHeader>
             <CardTitle>Edit Banner Details</CardTitle>
             <CardDescription>
@@ -139,26 +141,26 @@ export default function EditBannerForm({ banner, action }: Props) {
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+              {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
 
             <div className="w-full flex justify-center mt-5 ">
               <div className="flex flex-row gap-3">
-                <button
-                  type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
-                  onClick={() => {
-                    router.replace("/admin/dashboard/banners");
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#7e8d0d]"
-                  disabled={isPending}
-                >
-                  {isPending ? "Updating..." : "Save Changes"}
-                </button>
+                <Button1
+                type="button"
+                                  onClick={() => router.replace("/admin/dashboard/banner")}
+                                >
+                                  Cancel
+                                </Button1>
+                
+                                <Button2 type="submit" disabled={isPending}>
+                                  {isPending ? "Updating..." : "Save Changes"}
+                                </Button2>
+             
               </div>
             </div>
           </CardContent>

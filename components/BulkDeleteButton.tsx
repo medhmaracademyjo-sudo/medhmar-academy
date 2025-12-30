@@ -61,7 +61,7 @@ export default function BulkDeleteButton({
           className="flex items-center gap-2"
         >
           <Trash2 className="w-5 h-5" />
-          Delete ({ids.length})
+           ({ids.length})
         </Button>
       </DialogTrigger>
 

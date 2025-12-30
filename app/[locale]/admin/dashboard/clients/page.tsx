@@ -1,13 +1,13 @@
-import { clientsColumns } from "@/components/columns/clients-columns";
+import { ClientsColumns } from "@/components/columns/clients-columns";
 import { DataTable } from "@/components/data-table";
-import {deleteClient}from "@/app/models/db/lib/actions/clients"
+import {deleteClientAction}from "./(actions)/deleteClientAction"
 import NavigationButton from "@/components/NavigationButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { FolderOpen } from "lucide-react";
-import { getAllClients } from "@/app/models/db/lib/services/clients";
+import { getAllClients } from "@/app/server/clients/services";
 
 export default async function ClientsTable() {
-  const allClients = (await getAllClients()) || [];
+  const allClients = (await getAllClients()).data || [];
 
   return (
     <main className="flex flex-col justify-center items-center ml-7 w-[75vw] text-black">
@@ -39,10 +39,10 @@ export default async function ClientsTable() {
       ) : (
         <>
           <DataTable
-            columns={clientsColumns}
+            columns={ClientsColumns}
             data={allClients}
             routeName="clients"
-            deleteAction={deleteClient}
+            deleteAction={deleteClientAction}
           />
           <NavigationButton
             routeName="newClient"

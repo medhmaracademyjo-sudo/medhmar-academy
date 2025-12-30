@@ -1,6 +1,6 @@
 "use client";
-import {  NewProgram } from "@/types";
-import { useForm, SubmitHandler,Resolver } from "react-hook-form";
+import { NewProgram } from "@/types";
+import { useForm, SubmitHandler, Resolver } from "react-hook-form";
 import ImageUploader from "@/components/ImageUpload";
 import {
   Card,
@@ -18,22 +18,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import TextInput from "../inputs/TextInput";
 import TextareaInput from "../inputs/TextareaInput";
 import FormSelect from "../inputs/SelectorInput";
-import DateInput from "../inputs/DateInput"
-import {saudiCitiesAr,saudiCitiesEn} from "@/app/constants/saudiCities"
 import CheckboxInput from "../inputs/CheckBox";
+import Button1 from "../ui/Button1";
+import Button2 from "../ui/Button2";
 interface Props {
-  
   action: (
     data: NewProgram
   ) => Promise<{ success: boolean; message: string; status: number }>;
 }
 type ProgramFormValues = z.infer<typeof programsSchema>;
 
-
-export default function AddProgramForm({
-  action,
-  
-}: Props) {
+export default function AddProgramForm({ action }: Props) {
   const {
     register,
     handleSubmit,
@@ -42,8 +37,9 @@ export default function AddProgramForm({
     control,
     formState: { errors },
   } = useForm<ProgramFormValues>({
-    resolver: zodResolver(programsSchema) as unknown as Resolver<ProgramFormValues>,
-    
+    resolver: zodResolver(
+      programsSchema
+    ) as unknown as Resolver<ProgramFormValues>,
   });
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -51,8 +47,6 @@ export default function AddProgramForm({
   const handleUploadComplete = (url: string) => {
     setValue("image", url, { shouldValidate: true });
   };
-
-  
 
   setValue(
     "slug",
@@ -103,7 +97,7 @@ export default function AddProgramForm({
         onSubmit={handleSubmit(onSubmit)}
         className="h-full w-full lg:w-[70vw] flex flex-col gap-5"
       >
-        <Card className="w-full h-full">
+        <Card className="w-full h-full pt-10">
           <CardHeader>
             <CardTitle>New Program Details</CardTitle>
             <CardDescription>
@@ -117,13 +111,16 @@ export default function AddProgramForm({
                 name="program_type"
                 label="Program Type"
                 control={control}
-                options={[{
-                  label:"Life Programs",
-                  value:"life_programs"
-                },{
-                  label:"Professional Programs",
-                  value:"professional_programs"
-                }]}
+                options={[
+                  {
+                    label: "Life Programs",
+                    value: "life_programs",
+                  },
+                  {
+                    label: "Professional Programs",
+                    value: "professional_programs",
+                  },
+                ]}
                 error={errors.program_type}
                 placeholder="Select Type"
                 triggerClassName="w-full text-md"
@@ -170,31 +167,8 @@ export default function AddProgramForm({
                 className="lg:w-[19.5vw] w-full"
               />
             </div>
-             <div className="flex flex-col lg:flex-row w-full gap-4">
-              <FormSelect
-                name="program_location_en"
-                label="English Location "
-                control={control}
-                options={saudiCitiesEn}
-                error={errors.program_location_en}
-                placeholder="Select Location"
-                triggerClassName="w-full text-md"
-                className="lg:w-[19.5vw] w-full"
-              />
-               <FormSelect
-                name="program_location_ar"
-                label="Arabic Location"
-                control={control}
-                options={saudiCitiesAr}
-                error={errors.program_location_ar}
-                placeholder="Select Location"
-                triggerClassName="w-full text-md"
-                className="lg:w-[19.5vw] w-full"
-              />
-            </div>
-            <div className="flex flex-col lg:flex-row w-full gap-4">
-        
-            </div>
+           
+            <div className="flex flex-col lg:flex-row w-full gap-4"></div>
 
             <div className="flex flex-col w-full max-w-sm">
               <label className="text-base text-black mb-1">Program Image</label>
@@ -204,26 +178,30 @@ export default function AddProgramForm({
                 onUploadComplete={handleUploadComplete}
                 onUploadError={handleUploadError}
               />
+              {errors.image && (
+                <p className={`mt-1 text-xs text-red-600 `}>
+                  Image Is Required
+                </p>
+              )}
             </div>
 
-            <CheckboxInput register={register("feature")} label="Feature" error={errors.feature}/>
+            <CheckboxInput
+              register={register("feature")}
+              label="Feature Program?"
+              error={errors.feature}
+            />
 
             <div className="w-full flex justify-center mt-5">
               <div className="flex flex-row gap-3">
-                <button
+                <Button1
                   type="button"
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 cursor-pointer"
                   onClick={() => router.replace("/admin/dashboard/program")}
                 >
                   Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="bg-[#676e32] text-white px-4 py-2 rounded-md cursor-pointer hover:bg-[#89971b]"
-                  disabled={isPending}
-                >
+                </Button1>
+                <Button2 type="submit" disabled={isPending}>
                   {isPending ? "Adding..." : "Add Program"}
-                </button>
+                </Button2>
               </div>
             </div>
           </CardContent>

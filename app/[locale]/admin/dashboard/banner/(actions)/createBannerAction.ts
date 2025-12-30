@@ -32,6 +32,7 @@ export async function createBannerAction(data: NewBanner) {
 
     if (result.status === 201) {
       revalidatePath(`/admin/dashboard/banner`);
+      revalidatePath(`/ar/admin/dashboard/banner`);
       return { success:true,message: result.message, status: result.status };
     }
     return { success:false,message: result.message, status: result.status };

@@ -4,15 +4,12 @@ import { revalidatePath } from "next/cache";
 import { authOptions } from "@/app/auth/authoptions";
 import { Role, updateRole } from "@/app/server/users/services";
 
-export async function updateUserRole(data: {
-  userId:string, newRole:Role
-}) {
+export async function updateUserRole(data: { userId: string; newRole: Role }) {
   const session = await getServerSession(authOptions);
- 
 
   try {
     // ❗ Not logged in
-   if (!session)
+    if (!session)
       return {
         message: "Please Login",
         status: 401,
@@ -25,10 +22,11 @@ export async function updateUserRole(data: {
         status: 403,
       };
 
-   const result =  await updateRole(data.userId, data.newRole);
+    const result = await updateRole(data.userId, data.newRole);
 
-  revalidatePath(`/admin/dashboard/users`);
-   if (result.status !== 201)
+    revalidatePath(`/admin/dashboard/users`);
+    revalidatePath(`/ar/admin/dashboard/users`);
+    if (result.status !== 201)
       return {
         message: result.message,
         status: result.status,
@@ -39,7 +37,7 @@ export async function updateUserRole(data: {
       status: result.status,
     };
   } catch (error) {
-     return {
+    return {
       message: "Error In Updating User Role",
       status: 500,
     };

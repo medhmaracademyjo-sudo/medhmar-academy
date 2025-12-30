@@ -46,7 +46,7 @@ export default async function MemberTable() {
             routeName="ourTeam"
             deleteAction={deleteMemberAction}
           />
-         <div className="flex flex-row justify-center gap-4">
+         <div className="flex flex-row justify-center gap-4 ">
            <NavigationButton
             routeName="newMember"
             value="Add New Member"

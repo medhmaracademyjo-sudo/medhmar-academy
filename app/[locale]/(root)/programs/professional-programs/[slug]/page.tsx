@@ -50,11 +50,10 @@ export default async function CourseDetailsPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Program Info Grid */}
       <section className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
           <InfoCard
-            label={isAr ? 'المدة' : 'Duration'}
+            label={isAr ? 'عدد الساعات' : 'Hours'}
             value={course.duration_h || '-'}
             Icon={ClockIcon}
           />
@@ -68,10 +67,14 @@ export default async function CourseDetailsPage({ params }: PageProps) {
             value={course.duration_d || '-'}
             Icon={CalendarIcon}
           />
+          <InfoCard
+            label={isAr ? 'موقع الدورة' : 'Location'}
+            value={course.program_location || '-'}
+            Icon={FlagIcon}
+          />
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center text-center bg-[#2f6f34] text-white rounded-2xl shadow">
         <h3 className="text-3xl font-bold mb-2">{isAr ? 'هل أنت مستعد للبدء؟' : 'Ready to start?'}</h3>
         <p className="mb-6">{isAr ? 'انضم الآن وابدأ رحلتك التعليمية.' : 'Join now and start your learning journey.'}</p>

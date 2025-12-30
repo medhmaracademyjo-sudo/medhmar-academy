@@ -1,8 +1,28 @@
 import { Button } from '@/components/ui/button'
+import Image from 'next/image'
+import Button2 from '../ui/Button2'
 
-export default function LearningSection() {
+type Locale = 'ar' | 'en'
+
+export default function LearningSection({ locale }: { locale: Locale }) {
+  const isAr = locale === 'ar'
+
+  const content = {
+    title: isAr ? 'لماذا مبادرة إتقان؟' : 'Why Itqan Initiative?',
+    paragraphs: isAr
+      ? [
+          'يواجه كثير من الشباب فجوة حقيقية بين التعليم النظري ومتطلبات سوق العمل، وبين امتلاك المهارة والقدرة على الاستمرار والنجاح.',
+          'جاءت مبادرة إتقان لسد هذه الفجوة، عبر نموذج تنموي عملي يركز على الإنسان باعتباره محور التنمية وأداتها وغايتها المستقبلية.',
+        ]
+      : [
+          'Many young people face a real gap between theoretical education and labor market requirements, and between having skills and the ability to persist and succeed.',
+          'The Itqan Initiative was launched to bridge this gap through a practical developmental model that focuses on humans as the center, tool, and ultimate goal of development.',
+        ],
+    button: isAr ? 'تعرّف على المبادرة' : 'Learn About the Initiative',
+  }
+
   return (
-    <section className="bg-green-50">
+    <section className="bg-white">
       <div className="container mx-auto px-6 py-28">
         <div
           className="
@@ -13,50 +33,35 @@ export default function LearningSection() {
             mx-auto
             text-center md:text-left
           "
+          dir={isAr ? 'rtl' : 'ltr'}
         >
           {/* Text */}
           <div>
             <h2 className="text-3xl md:text-4xl font-extrabold mb-6 text-[#397a34]">
-              Learn at Your Own Pace
+              {content.title}
             </h2>
-            <p className="text-gray-700 mb-8 leading-relaxed text-lg">
-              Access courses anytime from any device.
-            </p>
 
-            <Button
-              size="lg"
-              className="
-                bg-[#397a34]
-                text-white
-                rounded-full
-                px-10
-                py-4
-                font-semibold
-                hover:bg-[#2f642b]
-                transition
-              "
+            {content.paragraphs.map((p, index) => (
+              <p key={index} className="text-gray-700 mb-6 leading-relaxed text-lg">
+                {p}
+              </p>
+            ))}
+
+            <Button2
+        
             >
-              Start Learning
-            </Button>
+              {content.button}
+            </Button2>
           </div>
 
-          {/* Preview Box */}
-          <div
-            className="
-              h-72
-              bg-white
-              rounded-3xl
-              border border-[#6ab742]/30
-              shadow-sm
-              flex
-              items-center
-              justify-center
-              text-[#397a34]
-              font-semibold
-              text-lg
-            "
-          >
-            Platform Preview
+          {/* Image */}
+          <div className="relative w-full h-72 md:h-80 rounded-3xl overflow-hidden shadow-sm border border-[#6ab742]/30">
+            <Image
+              src="/itqan-initiative.jpg"
+              alt={isAr ? 'مبادرة إتقان' : 'Itqan Initiative'}
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </div>

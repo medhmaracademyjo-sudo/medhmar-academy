@@ -28,6 +28,7 @@ export async function deleteBannerAction(bannerId:string) {
       const result = await deleteBanner(bannerId);
       if (result.status === 201) {
         revalidatePath(`/admin/dashboard/banner`);
+      revalidatePath(`/ar/admin/dashboard/banner`);
         return {success:true, message: result.message, status: result.status };
       }
       return {success:false, message: result.message, status: result.status };

@@ -84,7 +84,7 @@ export default function ProgramFormPage({
 
         if (result.status === 201) {
           toast.success(result.message);
-          //  router.push("/");
+           router.push("/");
           return;
         } else {
           toast.error(result.message);

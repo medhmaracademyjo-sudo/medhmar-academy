@@ -6,8 +6,6 @@ export const programsSchema= z.object({
     program_title_ar:z.string().min(1,"Arabic program title is requried"),
     program_description_en:z.string().min(1,"English description is required").nullable(),
     program_description_ar:z.string().min(1,"Arabic description is required").nullable(),
-    program_location_en:z.string().min(1,"English location is required").nullable(),
-    program_location_ar:z.string().min(1,"Arabic location is required").nullable(),
     duration_h:z.string().min(1,"Duration(Hours) is required"),
     duration_d:z.string().min(1,"Duration(Days) is required"),
     slug:z.string().min(1,"Slug is Required"),

@@ -5,6 +5,7 @@ import { forgotPasswordAction } from "./(actions)/forgotPasswordAction";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import EmailInput from "@/components/inputs/EmailInput";
+import Button2 from "@/components/ui/Button2";
 
 type FormData = {
   email: string;
@@ -75,20 +76,17 @@ function Page() {
           />
         )}
 
+        
+
         {!success && (
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 bg-[#676e32] text-white font-medium rounded-lg hover:bg-[#848e38] disabled:opacity-50 transition"
-          >
-            {loading ? "Sending..." : "Send Reset Link"}
-          </button>
+        <Button2 type="submit"
+            disabled={loading}> {loading ? "Sending..." : "Send Reset Link"}</Button2>
         )}
 
         <div className="text-center pt-4">
           <Link
             href="/login"
-            className="text-sm text-[#676e32] hover:underline font-medium"
+            className="text-sm text-[#397a34] hover:underline font-medium"
           >
             Back To Login
           </Link>

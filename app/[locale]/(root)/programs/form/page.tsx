@@ -1,7 +1,7 @@
 
 import {newApplicationAction} from "./(actions)/newApplicationAction"
 import ProgramFormPage from "@/components/aplications/SubmitNewApplication"
-import { getProgramByProgramType } from '@/app/server/programs/services'
+import { getProgramsByType } from '@/app/server/programs/services'
 type Locale = 'en' | 'ar'
 
 interface CourseFormPageProps {
@@ -12,8 +12,8 @@ export default async function Page({ params }: CourseFormPageProps) {
   const { locale } = await params
 const isAr = locale === 'ar'
 
-const allLifePrograms=  (await getProgramByProgramType("life_programs")).data
-const allProfessionalPrograms=  (await getProgramByProgramType("professional_programs")).data
+const allLifePrograms=  (await getProgramsByType("life_programs")).data
+const allProfessionalPrograms=  (await getProgramsByType("professional_programs")).data
 
 
 

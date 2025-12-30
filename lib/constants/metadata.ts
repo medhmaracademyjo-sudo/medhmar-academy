@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
-const SERVER_URL = process.env.NEXT_PUBLIC_APP_URL || "http://studioonejo.com";
-export const AppName = "Studio One";
+const SERVER_URL = process.env.NEXT_PUBLIC_APP_URL || "http://etqansa.com";
+export const AppName = "Etqan";
 export const APP_DESCRIPTION = "We provide the best engineering office services for residential and commercial projects in Jordan.";
 
 // الكلمات المفتاحية العامة

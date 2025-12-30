@@ -1,12 +1,12 @@
 import React from "react";
-import CreateNewClient from "@/components/clients/createNewClient"
-import { addClient } from "@/app/models/db/lib/actions/clients";
+import CreateNewClient from "@/components/clients/createNewClientForm"
+import { addClientAction } from "../(actions)/addClientAction";
 async function page() {
   
 
   return (
    <>
-   <CreateNewClient action={addClient}/>
+   <CreateNewClient action={addClientAction}/>
    </>
   );
 }

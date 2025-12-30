@@ -8,6 +8,8 @@ import CTASection from '@/components/homecomponents/CTASection'
 import Footer from '@/components/ui/Footer'
 import { homeData } from '@/data/homedata'
 import {getAllBannersByLocale} from "@/app/server/banners/services"
+import {getFeaturedProgramsByLocale} from "@/app/server/programs/services"
+
 
 type Locale = 'en' | 'ar'
 
@@ -19,8 +21,9 @@ interface PageProps {
 
 export default async function Page({ params }: PageProps) {
   const { locale } =  await params
-  const isAr = locale === 'ar'
   const data=await getAllBannersByLocale(locale)()
+    const programs=await getFeaturedProgramsByLocale(locale)
+
   const banners=data?.data
   
   
@@ -31,7 +34,7 @@ export default async function Page({ params }: PageProps) {
 
       <StatsSection stats={homeData.stats} />
       <ProgramsSection programs={homeData.programs} />
-      <CoursesSection courses={homeData.courses} />
+      <CoursesSection courses={programs.data} />
       <LearningSection />
       <BenefitsSection benefits={homeData.benefits} />
       <CTASection />
