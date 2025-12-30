@@ -110,16 +110,61 @@ export const deleteSetting = async (id: string) => {
   }
 };
 
+
 export const getSettingByLocale = async (
   locale: Locale,
   fieldName: string
 ): Promise<{ name: string | null; value: string | null } | null> => {
-  const settings = await getSettingsData();
-  const selected = settings.find((s) => s.key_name_en === fieldName);
-  if (!selected) return null;
+  return unstable_cache(
+    async () => {
+      const settings = await getSettingsData();
 
-  return {
-    name: locale === "ar" ? selected.key_name_ar : selected.key_name_en,
-    value: locale === "ar" ? selected.value_ar : selected.value_en,
-  };
+      const selected = settings.find(
+        (s) => s.key_name_en === fieldName
+      );
+
+      if (!selected) return null;
+
+      return {
+        name: locale === "ar"
+          ? selected.key_name_ar
+          : selected.key_name_en,
+        value: locale === "ar"
+          ? selected.value_ar
+          : selected.value_en,
+      };
+    },
+    [`get-settings-by-${locale}-${fieldName}`],
+    {
+      tags: ["settings"],
+      revalidate: 3600, 
+    }
+  )(); 
 };
+
+export const getSettingByFieldName = async (
+  fieldName: string
+): Promise<{ name: string | null; value: string | null } | null> => {
+  return unstable_cache(
+    async () => {
+      const settings = await getSettingsData();
+
+      const selected = settings.find(
+        (s) => s.key_name_en === fieldName
+      );
+
+      if (!selected) return null;
+
+      return {
+        name: selected.key_name_en,
+        value: selected.value_en,
+      };
+    },
+    [`get-settings-by-${fieldName}`],
+    {
+      tags: ["settings"],
+      revalidate: 3600, 
+    }
+  )(); 
+};
+

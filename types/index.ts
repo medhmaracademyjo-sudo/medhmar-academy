@@ -38,7 +38,7 @@ export type NewBanner = {
 export type TranslatedBanner = {
   name: string;
   image: string;
-  description: string;
+  description: string|null;
 };
 
 export type NewCategory = {
