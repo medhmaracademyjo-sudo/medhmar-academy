@@ -1,12 +1,12 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Clients } from "@/types";
+import { Partners } from "@/types";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
 import Image from "next/image";
 
-export const ClientsColumns: ColumnDef<Clients>[] = [
+export const PartnersColumns: ColumnDef<Partners>[] = [
  
   {
     id: "select",

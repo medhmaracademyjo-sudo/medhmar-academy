@@ -1,6 +1,5 @@
 "use client";
 
-import { Clients } from "@/types";
 import ImageUploader from "@/components/ImageUpload";
 import {
   Card,
@@ -13,20 +12,21 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { clientsSchema } from "@/app/server/clients/validators";
+import { partnersSchema } from "@/app/server/partners/validators";
 import { toast } from "sonner";
 import TextInput from "../inputs/TextInput";
 import Button1 from "../ui/Button1";
 import Button2 from "../ui/Button2";
+import { Partners } from "@/types/index";
 
 interface Props {
-  client: Clients |null;
-  action: (clientId:string,data: Clients) => Promise<{success:boolean, message:string, status:number}>;
+  partners: Partners |null;
+  action: (partnersId:string,data: Partners) => Promise<{success:boolean, message:string, status:number}>;
 }
 
-type ClientFormValues = Clients; 
+type PartnerFormValues = Partners; 
 
-export default function EditClientForm({ client, action }: Props) {
+export default function EditpartnersForm({ partners, action }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
 
@@ -36,12 +36,12 @@ export default function EditClientForm({ client, action }: Props) {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ClientFormValues>({
-    resolver: zodResolver(clientsSchema),
+  } = useForm<PartnerFormValues>({
+    resolver: zodResolver(partnersSchema),
     defaultValues: {
-      name_en: client?.name_en ?? "",
-      name_ar: client?.name_ar ?? "",
-      logo: client?.logo ?? "",
+      name_en: partners?.name_en ?? "",
+      name_ar: partners?.name_ar ?? "",
+      logo: partners?.logo ?? "",
     },
   });
 
@@ -57,12 +57,12 @@ export default function EditClientForm({ client, action }: Props) {
     toast.error(`Upload failed: ${error.message}`);
   };
 
-  const onSubmit: SubmitHandler<ClientFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<PartnerFormValues> = async (data) => {
     startTransition(async () => {
       try {
         console.log("data: ",data);
         
-       const result= await action(client?.id??"",data);
+       const result= await action(partners?.id??"",data);
         if (result.status === 401) {
           toast.error(result.message);
           router.push("/login");
@@ -74,14 +74,14 @@ export default function EditClientForm({ client, action }: Props) {
           else if(result.status===201){
  toast.success(result.message);
         setTimeout(() => {
-          router.replace("/admin/dashboard/clients");
+          router.replace("/admin/dashboard/partners");
         }, 500);
           }else {
           toast.error(result.message);
         }
        
       } catch (err) {
-        toast.error("Error In Updating The Client");
+        toast.error("Error In Updating The Partner");
       }
     });
   };
@@ -89,9 +89,9 @@ export default function EditClientForm({ client, action }: Props) {
   return (
     <main className="ml-3 xl:ml-7 mb-7">
       <div className="flex flex-col justify-start items-start border-b border-gray-500 w-[70vw] mb-7">
-        <h1 className="text-lg md:text-2xl font-bold">Edit Client</h1>
+        <h1 className="text-lg md:text-2xl font-bold">Edit partner</h1>
         <p className="text-xs md:text-base text-gray-600">
-          ID: {client?.id}
+          ID: {partners?.id}
         </p>
       </div>
 
@@ -101,9 +101,9 @@ export default function EditClientForm({ client, action }: Props) {
       >
         <Card className="w-full h-full pt-5">
           <CardHeader>
-            <CardTitle>Edit Client Details</CardTitle>
+            <CardTitle>Edit partner Details</CardTitle>
             <CardDescription>
-              Fill out the required fields below to update your Client.
+              Fill out the required fields below to update your partner.
             </CardDescription>
           </CardHeader>
 
@@ -125,7 +125,7 @@ export default function EditClientForm({ client, action }: Props) {
 
             {/* Logo */}
             <div className="flex flex-col w-full max-w-sm">
-              <label className="text-base text-black mb-1">Client Logo</label>
+              <label className="text-base text-black mb-1">partner Logo</label>
               <ImageUploader
                 endpoint="categories"
                 initialImageUrl={logoValue}
@@ -146,7 +146,7 @@ export default function EditClientForm({ client, action }: Props) {
               <div className="flex flex-row gap-3">
                 <Button1
                   type="button"
-                  onClick={() => router.replace("/admin/dashboard/clients")}
+                  onClick={() => router.replace("/admin/dashboard/partners")}
                 >
                   Cancel
                 </Button1>

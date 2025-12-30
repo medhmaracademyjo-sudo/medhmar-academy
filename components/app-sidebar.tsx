@@ -62,7 +62,7 @@ const items = [
     icon: ClipboardPenIcon,
   },
   { title: "My Team", url: "/admin/dashboard/ourTeam", icon: Users },
-    { title: "Clients", url: "/admin/dashboard/clients", icon: Crown },
+    { title: "Partners", url: "/admin/dashboard/partners", icon: Crown },
 
    {
     title: "Settings",

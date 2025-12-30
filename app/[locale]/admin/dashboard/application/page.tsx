@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import DefaultImage from "@/public/programImage.png";
-import { getProgramByProgramType } from "@/app/server/programs/services";
+import { getProgramsByType } from "@/app/server/programs/services";
 async function page() {
-  const allLifePrograms = (await getProgramByProgramType("life_programs")).data;
+  const allLifePrograms = (await getProgramsByType("life_programs")).data;
   const allProfessionalPrograms = (
-    await getProgramByProgramType("professional_programs")
+    await getProgramsByType("professional_programs")
   ).data;
 
   return (

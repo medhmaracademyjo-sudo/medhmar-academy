@@ -77,19 +77,19 @@ model our_team {
   display_order  Int?
 }
 
-model clients {
-  id      String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  name_en String @db.VarChar(255)
-  logo    String @db.VarChar(255)
-  name_ar String @db.VarChar(255)
-}
-
 model settings {
   id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   key_name_en String? @db.VarChar(255)
   key_name_ar String? @db.VarChar(255)
   value_en    String?
   value_ar    String?
+}
+
+model partners {
+  id      String @id(map: "clients_pkey") @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name_en String @db.VarChar(255)
+  logo    String @db.VarChar(255)
+  name_ar String @db.VarChar(255)
 }
 
 enum role {

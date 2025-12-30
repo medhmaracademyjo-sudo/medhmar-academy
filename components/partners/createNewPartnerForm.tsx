@@ -1,6 +1,6 @@
 "use client";
 
-import { Clients } from "@/types";
+import { Partners } from "@/types";
 import ImageUploader from "@/components/ImageUpload";
 import {
   Card,
@@ -14,18 +14,20 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
-import { clientsSchema } from "@/app/server/clients/validators";
+import { partnersSchema } from "@/app/server/partners/validators";
 import TextInput from "../inputs/TextInput";
 import Button1 from "../ui/Button1";
 import Button2 from "../ui/Button2";
 
 interface Props {
-  action: (data: Clients) => Promise<{success:boolean, message:string, status:number}>;
+  action: (
+    data: Partners
+  ) => Promise<{ success: boolean; message: string; status: number }>;
 }
 
-type ClientFormValues = Clients; 
+type PartnerFormValues = Partners;
 
-export default function AddClientForm({ action }: Props) {
+export default function CreateNewPartnerForm({ action }: Props) {
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
 
@@ -35,11 +37,11 @@ export default function AddClientForm({ action }: Props) {
     setValue,
     watch,
     formState: { errors, isSubmitting },
-  } = useForm<ClientFormValues>({
-    resolver: zodResolver(clientsSchema),
+  } = useForm<PartnerFormValues>({
+    resolver: zodResolver(partnersSchema),
     defaultValues: {
       name_en: "",
-      name_ar:"",
+      name_ar: "",
       logo: "",
     },
   });
@@ -56,39 +58,36 @@ export default function AddClientForm({ action }: Props) {
     toast.error(`Upload failed: ${error.message}`);
   };
 
-  const onSubmit: SubmitHandler<ClientFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<PartnerFormValues> = async (data) => {
     startTransition(async () => {
       try {
-             
-            const result= await action(data);
-             if (result.status === 401) {
-               toast.error(result.message);
-               router.push("/login");
-               return;
-             } else if (result.status === 403) {
-               toast.error(result.message);
-               router.push("/");
-               return;}
-               else if(result.status===201){
-      toast.success(result.message);
-             setTimeout(() => {
-               router.replace("/admin/dashboard/clients");
-             }, 500);
-               }else {
-               toast.error(result.message);
-             }
-            
-           } catch (err) {
-             toast.error("Error In Creating The Client");
-           }
-         });
-       };
-     
+        const result = await action(data);
+        if (result.status === 401) {
+          toast.error(result.message);
+          router.push("/login");
+          return;
+        } else if (result.status === 403) {
+          toast.error(result.message);
+          router.push("/");
+          return;
+        } else if (result.status === 201) {
+          toast.success(result.message);
+          setTimeout(() => {
+            router.replace("/admin/dashboard/partners");
+          }, 500);
+        } else {
+          toast.error(result.message);
+        }
+      } catch (err) {
+        toast.error("Error In Creating The Partner");
+      }
+    });
+  };
 
   return (
     <main className="ml-3 xl:ml-7 mb-7 ">
       <div className="flex flex-col justify-start items-start border-b border-gray-500 w-[70vw] mb-7">
-        <h1 className="text-lg md:text-2xl font-bold">Add New Client</h1>
+        <h1 className="text-lg md:text-2xl font-bold">Add New Partner</h1>
       </div>
 
       <form
@@ -97,9 +96,9 @@ export default function AddClientForm({ action }: Props) {
       >
         <Card className="w-full h-full pt-5">
           <CardHeader>
-            <CardTitle>New Client Details</CardTitle>
+            <CardTitle>New Partner Details</CardTitle>
             <CardDescription>
-              Fill out the required fields below to create a new Client.
+              Fill out the required fields below to create a new Partner.
             </CardDescription>
           </CardHeader>
 
@@ -111,7 +110,7 @@ export default function AddClientForm({ action }: Props) {
               error={errors.name_en}
               className="w-[80vw] md:w-[75vw] lg:w-[65vw] xl:w-[40vw]"
             />
-             <TextInput
+            <TextInput
               register={register("name_ar")}
               label="Arabic Name"
               error={errors.name_ar}
@@ -120,7 +119,7 @@ export default function AddClientForm({ action }: Props) {
 
             {/* Logo Field */}
             <div className="flex flex-col w-full max-w-sm">
-              <label className="text-base text-black mb-1">Client Logo</label>
+              <label className="text-base text-black mb-1">Partner Logo</label>
               <ImageUploader
                 endpoint="categories"
                 initialImageUrl={logoValue}
@@ -137,13 +136,13 @@ export default function AddClientForm({ action }: Props) {
               <div className="flex flex-row gap-3">
                 <Button1
                   type="button"
-                  onClick={() => router.replace("/admin/dashboard/clients")}
+                  onClick={() => router.replace("/admin/dashboard/partners")}
                 >
                   Cancel
                 </Button1>
 
                 <Button2 type="submit" disabled={isSubmitting || isPending}>
-                  {isSubmitting || isPending ? "Adding..." : "Add Client"}
+                  {isSubmitting || isPending ? "Adding..." : "Add partner"}
                 </Button2>
               </div>
             </div>

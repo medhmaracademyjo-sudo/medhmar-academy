@@ -22,7 +22,11 @@ export default function SortMemberButton({ routeName, value }: SortMemberButtonP
   return (
     <button
       onClick={handleClick}
-      className="px-5 py-2 bg-black text-white mb-20 font-medium rounded-md cursor-pointer hover:bg-gray-800 transition"
+      className={`px-6 py-3 rounded-full font-bold text-white
+        bg-[#397a34] border-2 border-[#397a34] relative overflow-hidden
+        before:absolute before:top-0 before:right-0 before:h-full before:w-0 before:bg-white/10 before:transition-all before:duration-300 hover:before:w-full
+        transition-all duration-300 hover:text-white
+        shadow-md hover:shadow-xl`}
     >
       {value}
     </button>

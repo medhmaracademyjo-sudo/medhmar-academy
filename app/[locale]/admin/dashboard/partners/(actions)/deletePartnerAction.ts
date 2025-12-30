@@ -2,9 +2,9 @@
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { authOptions } from "@/app/auth/authoptions";
-import { deleteClient } from "@/app/server/clients/services";
+import { deletepartner } from "@/app/server/partners/services";
 
-export async function deleteClientAction(clientId:string) {
+export async function deletePartnerAction(partnerId:string) {
   try {
       const session = await getServerSession(authOptions);
       // ❗ Not logged in
@@ -25,14 +25,14 @@ export async function deleteClientAction(clientId:string) {
         };
       }
   
-      const result = await deleteClient(clientId);
+      const result = await deletepartner(partnerId);
       if (result.status === 201) {
-        revalidatePath(`/admin/dashboard/clients`);
-      revalidatePath(`/ar/admin/dashboard/clients`);
+        revalidatePath(`/admin/dashboard/partners`);
+      revalidatePath(`/ar/admin/dashboard/partners`);
         return {success:true, message: result.message, status: result.status };
       }
       return {success:false, message: result.message, status: result.status };
     } catch (error) {      
-      return {success:false, message: "Error In Deleting Client", status: 500 };
+      return {success:false, message: "Error In Deleting Partner", status: 500 };
     }
 }

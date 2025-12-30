@@ -1,11 +1,11 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 import { authOptions } from "@/app/auth/authoptions";
-import { Clients } from "@/types";
-import { updateClient } from "@/app/server/clients/services";
+import { addPartner } from "@/app/server/partners/services";
+import { Partners } from "@/types/index";
 
-export async function editClientAction(clientId:string,data: Partial<Clients>) {
+export async function addpartnerAction(data: Partners) {
   try {
     const session = await getServerSession(authOptions);
     // ❗ Not logged in
@@ -26,17 +26,18 @@ export async function editClientAction(clientId:string,data: Partial<Clients>) {
       };
     }
 
-    const result = await updateClient(clientId, data);
+    const result = await addPartner(data);
 
     if (result.status === 201) {
-      revalidatePath(`/admin/dashboard/clients`);
-      revalidatePath(`/ar/admin/dashboard/clients`);
+      revalidatePath(`/admin/dashboard/partners`);
+      revalidatePath(`/ar/admin/dashboard/partners`);
+
       return { success: true, message: result.message, status: result.status };
     }
     return { success: false, message: result.message, status: result.status };
   } catch (error) {
-    console.log("description_ar:banner?.description_ar??",error);
-    
-    return {success:false, message: "Error In Updating The Client", status: 500 };
+    console.log("lkdfj error: 0:", error);
+
+    return { success: false, message: "Error In Adding partners", status: 500 };
   }
 }

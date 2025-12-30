@@ -129,7 +129,7 @@ export const PAGE_METADATA: Record<string, Metadata> = {
     twitter: {
       card: "summary_large_image",
       title: "Mission & Vision - Studio One",
-      description: "Studio One's mission is to deliver tailored interior design solutions that reflect clients’ unique vision and lifestyle.",
+      description: "Studio One's mission is to deliver tailored interior design solutions that reflect partners unique vision and lifestyle.",
       images: [`${SERVER_URL}/logo-open-graph.png`],
     },
   },

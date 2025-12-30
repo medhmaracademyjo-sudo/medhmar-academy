@@ -40,6 +40,7 @@ export const getProgramsByType = (
       try {
         const result = await prisma.programs.findMany({
           where: { program_type: type },
+          include: { applications: true },
         });
 
         return {
@@ -101,7 +102,7 @@ export const getProgramsByLocale = async (
           locale === "en"
             ? program.program_description_en
             : program.program_description_ar,
-   
+
         slug: program.slug,
         image: program.image,
         program_type: program.program_type,
@@ -158,7 +159,7 @@ export const getProgramBySlugAndLocale = (slug: string, locale: Locale) =>
             locale === "en"
               ? program.program_description_en
               : program.program_description_ar,
-        
+
           slug: program.slug,
           image: program.image,
           program_type: program.program_type,
@@ -171,13 +172,13 @@ export const getProgramBySlugAndLocale = (slug: string, locale: Locale) =>
           message: "Program fetched successfully",
           status: 200,
         };
-      }catch {
-  return {
-    data: null,
-    message: "Error fetching program",
-    status: 500,
-  };
-}
+      } catch {
+        return {
+          data: null,
+          message: "Error fetching program",
+          status: 500,
+        };
+      }
     },
     [`program-by-slug-locale-${slug}-${locale}`],
     { tags: ["programs"], revalidate: 3600 }
@@ -228,8 +229,6 @@ export const deleteProgram = async (id: string) => {
   }
 };
 
-
-
 export const getFeaturedProgramsByLocale = (locale: Locale) =>
   unstable_cache(
     async () => {
@@ -248,7 +247,7 @@ export const getFeaturedProgramsByLocale = (locale: Locale) =>
               locale === "en"
                 ? program.program_description_en
                 : program.program_description_ar,
-       
+
             slug: program.slug,
             image: program.image,
             program_type: program.program_type,
@@ -273,3 +272,28 @@ export const getFeaturedProgramsByLocale = (locale: Locale) =>
     [`featured-programs-${locale}`],
     { tags: ["programs"], revalidate: 3600 }
   )();
+export const getProgramNameAndIdById= (id: string) => {
+  const cachedFn = unstable_cache(
+    async () => {
+      try {
+        const result = await prisma.programs.findUnique({
+          where: { id },
+          select:{id:true, program_title_en:true}
+        });
+        if (!result)
+          return { data: null, message: "Program not found", status: 409 };
+        return {
+          data: result,
+          message: "Program fetched successfully",
+          status: 200,
+        };
+      } catch (error) {
+        return { data: null, message: "Error fetching program", status: 500 };
+      }
+    },
+    [`program-name-by-id-${id}`],
+    { tags: ["programs"], revalidate: 3600 }
+  );
+
+  return cachedFn();
+};

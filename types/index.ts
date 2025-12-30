@@ -92,7 +92,7 @@ export type newSetting = {
   value_ar?: string | null;
 };
 
-export type Clients = {
+export type Partners = {
   id?: string;
   name_en: string;
   name_ar: string;
