@@ -57,7 +57,7 @@ export default async function Page({ params }: PageProps) {
        
       />
       <ProgramsSection locale={locale} />
-      <CoursesSection courses={programs.data} />
+      <CoursesSection courses={programs.data} locale={locale} />
       <LearningSection  locale={locale} />
       <ClosingSection  locale={locale} />
       <CTASection locale={locale} />

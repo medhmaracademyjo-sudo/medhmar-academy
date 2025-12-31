@@ -110,9 +110,7 @@ export async function AppSidebar() {
                 side="top"
                 className="min-w-44 rounded-lg shadow-lg"
               >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
+          
                 <DropdownMenuItem>
                   <Link
                     href="/change-password"

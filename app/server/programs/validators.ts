@@ -9,7 +9,7 @@ export const programsSchema= z.object({
     duration_h:z.string().min(1,"Duration(Hours) is required"),
     duration_d:z.string().min(1,"Duration(Days) is required"),
     slug:z.string().min(1,"Slug is Required"),
-    image:z.string().min(1,"Category image is required").nullable(),
+    image:z.string().min(1,"Program image is required").nullable(),
      program_type: z.enum(["life_programs", "professional_programs"]),
      feature:z.boolean()
 

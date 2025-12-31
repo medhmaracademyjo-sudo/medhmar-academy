@@ -20,7 +20,7 @@ const allProfessionalPrograms=  (await getProgramsByType("professional_programs"
   return ( 
    <main className=' bg-green-50'>
      <header className="text-center  ">
-          <h1 className="text-4xl font-bold  text-[#397a34] pt-10 pb-2.5">
+          <h1 className="text-4xl font-bold  centert text-[#397a34] pt-10 pb-2.5">
             {isAr ? 'نموذج تسجيل البرنامج' : 'Program Registration Form'}
           </h1>
           <p className="text-gray-700 max-w-2xl mx-auto">

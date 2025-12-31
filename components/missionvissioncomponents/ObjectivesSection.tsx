@@ -7,11 +7,15 @@ import SustainableObjectives from "@/components/missionvissioncomponents/objecti
 export default function ObjectivesSection({ isAr }: { isAr: boolean }) {
   return (
     <div>
+            <CareerObjectives isAr={isAr} />
+
       <GeneralObjectives isAr={isAr} />
-      <CareerObjectives isAr={isAr} />
-      <LifeObjectives isAr={isAr} />
-      <SocialObjectives isAr={isAr} />
-      <SustainableObjectives isAr={isAr} />
+        <SocialObjectives isAr={isAr} />
+              <LifeObjectives isAr={isAr} />
+
+       <SustainableObjectives isAr={isAr} />
+    
+     
     </div>
   )
 }

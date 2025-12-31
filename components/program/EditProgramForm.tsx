@@ -26,7 +26,7 @@ import Button2 from "../ui/Button2";
 interface Props {
   program: NewProgram | null;
   action: (
-    categoryId: string,
+    programId: string,
     data: Partial<NewProgram>
   ) => Promise<{ success: boolean; message: string; status: number }>;
 }

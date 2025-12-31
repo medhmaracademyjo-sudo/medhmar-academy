@@ -27,7 +27,7 @@ export default function WhyChooseProfessionalPrograms({
   return (
     <section className="bg-[#6ab742]/10 py-24">
       <div className="container mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-14 text-[#397a34]">
+        <h2 className="text-3xl centert md:text-4xl font-extrabold text-center mb-14 text-[#397a34]">
           {isAr
             ? "لماذا تختار البرامج الاحترافية"
             : "Why Choose Professional Programs"}

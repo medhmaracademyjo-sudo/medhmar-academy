@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import TextInput from "../inputs/TextInput";
 import EmailInput from "../inputs/EmailInput";
 import FormSelect from "../inputs/SelectorInput";
+import Button2 from "@/components/ui/Button2"
 import {
   saudiCitiesAr,
   saudiCitiesEn,
@@ -206,12 +207,12 @@ export default function ProgramFormPage({
             </label>
           </div>
 
-          <Button
+          <Button2
             type="submit"
             className="w-full bg-[#397a34] text-white hover:bg-green-700 py-6 text-lg  md:col-span-2"
           >
             {isAr ? "إرسال الطلب" : "Submit Application"}
-          </Button>
+          </Button2>
         </form>
       </div>
     </section>

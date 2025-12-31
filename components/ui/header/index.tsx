@@ -13,8 +13,6 @@ import Button2 from "@/components/ui/Button2";
 import Logo from "@/public/Logo.png";
 import Image from "next/image";
 
-
-
 export default function Header() {
   const [open, setOpen] = useState(false);
   const t = useTranslations("Navbar");
@@ -34,15 +32,15 @@ export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="sticky  px-5 top-0 z-50 w-full border-b border-black/10 bg-background/95 backdrop-blur">
+      <header className="sticky top-0 z-50 w-full border-b border-black/10 bg-background/95 backdrop-blur px-5">
         <nav className="container mx-auto flex h-20 items-center justify-between px-6">
           {/* Logo */}
-            <Link
-    href="/"
-    className="flex items-center text-2xl font-extrabold tracking-tight text-primary shrink-0"
-  >
-    <img src={Logo.src} alt="Logo" width={40} height={40}  />
-  </Link>
+          <Link
+            href="/"
+            className="flex items-center text-2xl font-extrabold tracking-tight text-primary shrink-0"
+          >
+            <img src={Logo.src} alt="Logo" width={40} height={40} />
+          </Link>
 
           {/* Desktop Nav */}
           <ul className="hidden md:flex items-center gap-10">
@@ -61,7 +59,6 @@ export default function Header() {
               </li>
             ))}
 
-            {/* Programs Dropdown */}
             <li className="relative group">
               <span className="flex items-center gap-1 cursor-pointer text-sm font-medium text-muted-foreground px-2 py-2 hover:text-primary">
                 {t("programs")}
@@ -86,7 +83,8 @@ export default function Header() {
           <div className="flex items-center gap-4 md:gap-6">
             {/* Enroll Button */}
             <Link href="/programs/form" className="hidden md:inline-flex">
-              <Button2 className="px-6 py-3 text-base">Enroll Now</Button2>
+              <Button2 className="px-6 py-3 text-base">                              {t("button")}
+</Button2>
             </Link>
 
             {/* Language Switcher */}
@@ -95,7 +93,12 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Button */}
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setOpen(true)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setOpen(true)}
+            >
               <Menu />
             </Button>
           </div>
@@ -105,21 +108,24 @@ export default function Header() {
       {/* Mobile Overlay */}
       {open && (
         <div
-          className="fixed inset-0 z-50 bg-black/40"
+          className="fixed inset-0 z-50 bg-black/20"
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* Mobile Drawer */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-72 bg-white shadow-xl transform transition-transform duration-300 ${
+        className={`fixed top-0 right-0 z-50 h-full w-72 bg-green-50 shadow-xl transform transition-transform duration-300 ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between p-4 border-b">
-          <span className="font-bold text-lg">Menu</span>
+        <div className="flex items-center justify-between p-4 border-b border-[#397a34]/30">
+          <span className="font-bold text-lg text-[#397a34]">
+          <div className="mt-4 px-4">
+            <LanguageSwitcher />
+          </div></span>
           <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
-            <X />
+            <X className="text-[#397a34]" />
           </Button>
         </div>
 
@@ -129,14 +135,14 @@ export default function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
+              className="rounded-lg px-4 py-3 text-sm font-medium text-[#397a34] hover:text-[#FDE68A] hover:bg-green-100 transition-colors"
             >
               {t(item.key)}
             </Link>
           ))}
 
-          <div className="mt-4 border-t pt-4">
-            <p className="px-4 py-2 text-xs font-semibold uppercase text-muted-foreground">
+          <div className="mt-4 border-t border-[#397a34]/30 pt-4">
+            <p className="px-4 py-2 text-xs font-semibold uppercase text-[#397a34]">
               {t("programs")}
             </p>
             {programItems.map((item) => (
@@ -144,7 +150,7 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-6 py-3 text-sm hover:bg-accent transition-colors"
+                className="block rounded-lg px-6 py-3 text-sm text-[#397a34] hover:text-[#FDE68A] hover:bg-green-100 transition-colors"
               >
                 {t(item.key)}
               </Link>
@@ -152,14 +158,12 @@ export default function Header() {
           </div>
 
           <Link href="/programs/form" onClick={() => setOpen(false)}>
-            <Button className="mt-6 w-full bg-black text-white py-3 text-base hover:bg-gray-800 transition-colors">
-              Enroll Now
-            </Button>
+            <Button2 >
+                              {t("button")}
+
+            </Button2>
           </Link>
 
-          <div className="mt-4 px-4">
-            <LanguageSwitcher />
-          </div>
         </nav>
       </div>
     </>

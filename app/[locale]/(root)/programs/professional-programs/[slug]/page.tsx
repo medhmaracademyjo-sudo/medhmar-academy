@@ -4,6 +4,7 @@ import { Locale, translatedProgram } from '@/types'
 import { CalendarIcon, ClockIcon, ClipboardIcon, FlagIcon } from '@heroicons/react/24/outline'
 import Button1 from '@/components/ui/Button1'
 import Button2 from '@/components/ui/Button2'
+import Link from 'next/link'
 
 type PageProps = {
   params: {
@@ -44,14 +45,13 @@ export default async function CourseDetailsPage({ params }: PageProps) {
           <h1 className="text-4xl font-bold text-gray-800">{course.program_title}</h1>
           <p className="text-gray-600">{course.program_description}</p>
           <div className="flex gap-4 mt-4">
-            <Button1>{isAr ? 'التسجيل الآن' : 'Enroll Now'}</Button1>
-            <Button2>{isAr ? 'المزيد من المعلومات' : 'Learn More'}</Button2>
+            <Button2>{isAr ? 'التسجيل الآن' : 'Enroll Now'}</Button2>
           </div>
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           <InfoCard
             label={isAr ? 'عدد الساعات' : 'Hours'}
             value={course.duration_h || '-'}
@@ -59,7 +59,7 @@ export default async function CourseDetailsPage({ params }: PageProps) {
           />
           <InfoCard
             label={isAr ? 'نوع البرنامج' : 'Program Type'}
-            value={course.program_type || '-'}
+            value={isAr ? 'برنامج مهني' : 'Professional Program'}
             Icon={ClipboardIcon}
           />
           <InfoCard
@@ -67,20 +67,18 @@ export default async function CourseDetailsPage({ params }: PageProps) {
             value={course.duration_d || '-'}
             Icon={CalendarIcon}
           />
-          <InfoCard
-            label={isAr ? 'موقع الدورة' : 'Location'}
-            value={course.program_location || '-'}
-            Icon={FlagIcon}
-          />
+   
         </div>
       </section>
 
       <section className="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center text-center bg-[#2f6f34] text-white rounded-2xl shadow">
         <h3 className="text-3xl font-bold mb-2">{isAr ? 'هل أنت مستعد للبدء؟' : 'Ready to start?'}</h3>
         <p className="mb-6">{isAr ? 'انضم الآن وابدأ رحلتك التعليمية.' : 'Join now and start your learning journey.'}</p>
-        <Button className="bg-white text-[#2f6f34] px-8 py-3 rounded-lg hover:bg-green-100">
+        <Link href={"/programs/form"}>
+        <Button1>
           {isAr ? 'التسجيل' : 'Enroll Now'}
-        </Button>
+        </Button1>
+        </Link>
       </section>
     </div>
   )

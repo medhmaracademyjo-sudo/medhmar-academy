@@ -5,7 +5,9 @@
     "missionvision": "Mission & Vision",
     "programs": "Programs",
     "program1": "Professional Programs",
-    "program2": "Life Programs"
+    "program2": "Life Programs",
+        "button":"Enroll Now"
+
   }
   ,
     "ProgramsSection": {

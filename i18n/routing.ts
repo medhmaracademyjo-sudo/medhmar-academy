@@ -5,7 +5,7 @@ export const routing = defineRouting({
   locales: ['en', 'ar'],
 
   // اللغة الافتراضية
-  defaultLocale: 'en',
+  defaultLocale: 'ar',
 
   // دوماً نضيف البريفكس بالـ URL
   localePrefix: 'never',
