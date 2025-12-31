@@ -1,18 +1,14 @@
-// TechnicalTeam.tsx
 import TechnicalTeamMemberCard from "./TechnicalTeamMemberCard"
+import {getMembersByTypeAndLocale} from "@/app/server/our_team/services"
 
-export default function TechnicalTeam({ isAr }: { isAr: boolean }) {
-  const team = [
-    { name: "سامر الحسن", role: "مهندس برمجيات أول" },
-    { name: "ليلى الجابر", role: "مصممة تجربة المستخدم" },
-    { name: "عمر الكردي", role: "مهندس DevOps" },
-    { name: "هالة فهد", role: "محللة بيانات" },
-    { name: "رامي نعيم", role: "مهندس واجهات أمامية" },
-    { name: "مريم شريف", role: "مهندسة واجهات خلفية" },
-    { name: "تامر أبو راشد", role: "مختبر جودة البرمجيات" },
-    { name: "نورا سعيد", role: "مسؤولة دعم فني" },
-    { name: "خالد يوسف", role: "منسق البنية التحتية" },
-  ]
+export default async function TechnicalTeam({ isAr }: { isAr: boolean }) {
+    const locale = isAr ? "ar" : "en"
+  const lifeProgramsMembers=  (await getMembersByTypeAndLocale(locale,"life_programs")).data
+    const professionalProgramsMembers=  (await getMembersByTypeAndLocale(locale,"professional_programs")).data
+
+const team= [...lifeProgramsMembers,...professionalProgramsMembers]
+  
+ 
 
   return (
     <section className="bg-green-50">  
@@ -24,7 +20,7 @@ export default function TechnicalTeam({ isAr }: { isAr: boolean }) {
       <div className="flex flex-wrap justify-center gap-8">
         {team.map((member, i) => (
           <div key={i} className="flex-1 min-w-[320px] max-w-xs">
-            <TechnicalTeamMemberCard {...member} />
+            <TechnicalTeamMemberCard data={member} locale={locale} />
           </div>
         ))}
       </div>

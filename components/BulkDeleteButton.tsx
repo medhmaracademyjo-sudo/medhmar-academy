@@ -30,26 +30,34 @@ export default function BulkDeleteButton({
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  async function handleBulkDelete() {
-    if (ids.length === 0) return;
+ async function handleBulkDelete() {
+  if (ids.length === 0) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      for (const id of ids) {
-        const result = await deleteAction(id);
-        if (result.status !== 201) return toast.error(result.message);
-        toast.success(result.message);
-      }
+  try {
+    const results = await Promise.all(
+      ids.map((id) => deleteAction(id))
+    );
 
-      if (onFinish) onFinish();
-    } catch {
-      toast.error("Error In Deleting The Selected Fields");
-    } finally {
-      setLoading(false);
-      setOpen(false);
+    const failed = results.find((r) => r.status !== 201);
+
+    if (failed) {
+      toast.error(failed.message);
+      return;
     }
+
+    toast.success(`${ids.length} item(s) deleted successfully`);
+
+    onFinish?.();
+  } catch {
+    toast.error("Error in deleting the selected items");
+  } finally {
+    setLoading(false);
+    setOpen(false);
   }
+}
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

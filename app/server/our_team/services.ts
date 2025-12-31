@@ -176,3 +176,72 @@ export const getMemberNameIdAndImage = async () => {
     };
   }
 };
+
+
+
+type MemberType = "founder" | "life_programs" | "professional_programs"
+
+export const getMembersByTypeAndLocale = async (
+  locale: Locale,
+  memberType?: MemberType
+) => {
+  return unstable_cache(
+    async () => {
+      const allMembers = (await getAllMembers()).data;
+
+      // filter by member_type if provided
+      const filteredMembers = memberType
+        ? allMembers.filter((m) => m.member_type === memberType)
+        : allMembers;
+
+      // translate fields based on locale
+      const translatedMembers = filteredMembers.map((member) => ({
+        name: locale === "en" ? member.name_en : member.name_ar,
+        description: locale === "en" ? member.description_en : member.description_ar,
+        position: locale === "en" ? member.position_en : member.position_ar,
+        image: member.image,
+        display_order: member.display_order,
+        member_type: member.member_type,
+        id: member.id,
+      }));
+
+      return {
+        data: translatedMembers,
+        message: "Translated members",
+        status: 200,
+      };
+    },
+    [`members-by-${locale}-${memberType ?? "all"}`], 
+    {
+      tags: ["our_team"],
+      revalidate: 3600, 
+    }
+  )();
+};
+
+
+export const getNonFounderMembersCount = 
+    async () => {
+      try {
+        const count = await prisma.our_team.count({
+          where: {
+            member_type: {
+              not: "founder",
+            },
+          },
+        });
+
+        return {
+          data: count,
+          message: "Non-founder members count fetched successfully",
+          status: 200,
+        };
+      } catch (error) {
+        return {
+          data: 0,
+          message: "Error fetching non-founder members count",
+          status: 500,
+        };
+      }
+    }
+   

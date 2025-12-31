@@ -9,15 +9,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { TranslatedPartners } from "@/types";
 
-export default function InitiativePartners({ isAr }: { isAr: boolean }) {
-  const partners = [
-    { name: "معهد مصادر الإبداع للتدريب",  img: "/Logo.png" },
-    { name: "أكاديمية مضمار لتطوير الأداء والتنمية البشرية", img: "/Logo.png" },
-    { name: "شركاء استراتيجيين آخرين", img: "/Logo.png"},
-    { name: "شريك رابع", img: "/Logo.png" },
-    { name: "شريك خامس", img: "/Logo.png" },
-  ];
+export default function InitiativePartners({ isAr,partners }: { isAr: boolean,partners:TranslatedPartners[] }) {
+ 
 
   const autoplay = React.useRef(
     Autoplay({ delay: 3000, stopOnInteraction: false })
@@ -49,7 +44,7 @@ export default function InitiativePartners({ isAr }: { isAr: boolean }) {
               <div className="flex flex-col items-center">
                 <div className="w-24 h-24 md:w-32 bg-white md:h-32 rounded-full overflow-hidden mb-3 border-2 border-gray-200">
                   <img
-                    src={partner.img}
+                    src={partner.logo}
                     alt={partner.name}
                     className="w-full h-full object-cover"
                   />

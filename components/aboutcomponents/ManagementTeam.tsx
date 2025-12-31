@@ -1,25 +1,9 @@
 import TeamMemberCard from "./TeamMemberCard"
-
-export default function ManagementTeam({ isAr }: { isAr: boolean }) {
+import {getMembersByTypeAndLocale} from "@/app/server/our_team/services"
+export default async function ManagementTeam({ isAr }: { isAr: boolean }) {
   const locale = isAr ? "ar" : "en"
-
-  const team = [
-    {
-      name: "الدكتور أسامة الصمادي",
-      role: "المدير العام للمبادرة",
-      description: "نبذة مختصرييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييييبيبيبيبيبيبيبييييييييييييية عن العضو.",
-    },
-    {
-      name: "الدكتور فيصل الغريب",
-      role: "المستشار العام للمبادرة",
-      description: "نبذة مختصرة عن العضو.",
-    },
-    {
-      name: "الدكتور عبد المجيد الروابدة",
-      role: "المدير التنفيذي",
-      description: "نبذة مختصرة عن العضو.",
-    },
-  ]
+const managementMembers=  (await getMembersByTypeAndLocale(locale,"founder")).data
+  
 
   return (
     <section className="container mx-auto px-6 py-28">
@@ -28,9 +12,9 @@ export default function ManagementTeam({ isAr }: { isAr: boolean }) {
       </h2>
 
       <div className="flex flex-wrap justify-center gap-8">
-        {team.map((member, i) => (
+        {managementMembers.map((member, i) => (
           <div key={i} className="flex-1 min-w-[320px] max-w-xs">
-            <TeamMemberCard {...member} locale={locale} />
+            <TeamMemberCard data={member} locale={locale} />
           </div>
         ))}
       </div>

@@ -99,6 +99,12 @@ export type Partners = {
   logo: string;
 };
 
+export type TranslatedPartners = {
+  id?: string;
+  name: string;
+  logo: string;
+};
+
 export type NewApplication = {
   name: string;
   gender: "male" | "female";
@@ -132,6 +138,16 @@ export type NewMember = {
   description_ar: string | null;
   position_en: string;
   position_ar: string;
+  display_order?: number | null | undefined;
+  member_type: "founder" | "life_programs" | "professional_programs" | null;
+  image: string | null;
+};
+
+export type TranslatedMember = {
+  id?: string;
+  name: string;
+  description: string | null;
+  position: string;
   display_order?: number | null | undefined;
   member_type: "founder" | "life_programs" | "professional_programs" | null;
   image: string | null;

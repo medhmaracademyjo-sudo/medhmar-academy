@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { unstable_cache, revalidateTag } from "next/cache";
-import { Partners } from "@/types";
+import { Partners,Locale } from "@/types";
 
 
 export const addPartner = async (data: Partners) => {
@@ -8,7 +8,7 @@ export const addPartner = async (data: Partners) => {
     const result = await prisma.partners.create({
       data,
     });
-    revalidateTag("Partners", "max");
+    revalidateTag("partners", "max");
     return {
       data: result,
       message: "Client added successfully",
@@ -41,7 +41,7 @@ export const getAllPartners = unstable_cache(
     }
   },
   ["all-Partners"],
-  { tags: ["Partners"], revalidate: 3600 }
+  { tags: ["partners"], revalidate: 3600 }
 );
 
 export const getPartnerById = (id: string) => {
@@ -73,7 +73,7 @@ export const getPartnerById = (id: string) => {
       }
     },
     [`Partners-by-id-${id}`],
-    { tags: ["Partners"], revalidate: 3600 }
+    { tags: ["partners"], revalidate: 3600 }
   );
 
   return cachedFn();
@@ -151,4 +151,39 @@ export const deletepartner= async (id: string) => {
       status: 500,
     };
   }
+};
+
+
+
+export const getPartnersByLocale = async (locale: Locale) => {
+  return unstable_cache(
+    async () => {
+      const result = await getAllPartners();
+
+      if (result.status !== 200 || !result.data) {
+        return {
+          data: [],
+          message: "Error fetching partners",
+          status: 500,
+        };
+      }
+
+      const translatedPartners = result.data.map((partner) => ({
+        id: partner.id,
+        name: locale === "en" ? partner.name_en : partner.name_ar,
+        logo: partner.logo,
+      }));
+
+      return {
+        data: translatedPartners,
+        message: "Partners translated successfully",
+        status: 200,
+      };
+    },
+    [`partners-by-locale-${locale}`],
+    {
+      tags: ["partners"], 
+      revalidate: 3600,
+    }
+  )();
 };
